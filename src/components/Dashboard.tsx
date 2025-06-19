@@ -1,8 +1,10 @@
+
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useGroceryStore } from '@/stores/useGroceryStore';
-import { TrendingUp, DollarSign, Package, AlertTriangle, Wallet, CreditCard, FileText } from 'lucide-react';
+import { TrendingUp, DollarSign, Package, AlertTriangle, Wallet, CreditCard, FileText, Database, BarChart3, Users } from 'lucide-react';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { cn } from '@/lib/utils';
+import { Badge } from '@/components/ui/badge';
 
 interface DashboardProps {
   onSectionChange: (section: string) => void;
@@ -107,71 +109,100 @@ const Dashboard = ({ onSectionChange }: DashboardProps) => {
 
   const comingSoonStats = [
     {
-      title: 'إجمالي المبلغ دائن',
+      title: 'إدارة المخزون المتقدمة',
       value: (
         <div>
-          <p className={`${isMobile ? 'text-xl' : 'text-2xl'} font-bold text-foreground/70 flex items-baseline gap-1`}>
-            <span>0</span>
-            <span className="text-sm font-normal text-muted-foreground">ر.ي</span>
+          <p className={`${isMobile ? 'text-base' : 'text-lg'} font-semibold text-foreground/70 mb-1`}>
+            تتبع دقيق للمخزون
           </p>
-          <p className={`${isMobile ? 'text-xs' : 'text-sm'} text-muted-foreground flex items-baseline gap-1`}>
-            <span>≈ 0</span>
-            <span className="text-xs">ر.س</span>
+          <p className={`${isMobile ? 'text-xs' : 'text-sm'} text-muted-foreground`}>
+            إشعارات ذكية وتحليلات متقدمة
           </p>
         </div>
       ),
-      icon: CreditCard,
-      color: 'text-gray-400',
-      bgColor: 'bg-gray-500/10',
+      icon: Database,
+      color: 'text-blue-500',
+      bgColor: 'bg-blue-500/10',
       disabled: true,
     },
     {
-      title: 'إجمالي المبلغ مدين',
+      title: 'تقارير وتحليلات',
       value: (
         <div>
-          <p className={`${isMobile ? 'text-xl' : 'text-2xl'} font-bold text-foreground/70 flex items-baseline gap-1`}>
-            <span>0</span>
-            <span className="text-sm font-normal text-muted-foreground">ر.ي</span>
+          <p className={`${isMobile ? 'text-base' : 'text-lg'} font-semibold text-foreground/70 mb-1`}>
+            تقارير شاملة
           </p>
-          <p className={`${isMobile ? 'text-xs' : 'text-sm'} text-muted-foreground flex items-baseline gap-1`}>
-            <span>≈ 0</span>
-            <span className="text-xs">ر.س</span>
+          <p className={`${isMobile ? 'text-xs' : 'text-sm'} text-muted-foreground`}>
+            رسوم بيانية وإحصائيات مفصلة
           </p>
         </div>
       ),
-      icon: CreditCard,
-      color: 'text-gray-400',
-      bgColor: 'bg-gray-500/10',
+      icon: BarChart3,
+      color: 'text-purple-500',
+      bgColor: 'bg-purple-500/10',
       disabled: true,
     },
     {
-      title: 'الالتزامات',
-      value: <p className="text-sm font-medium text-foreground/70 pt-2">رواتب، كهرباء، إيجارات</p>,
+      title: 'إدارة العملاء',
+      value: (
+        <div>
+          <p className={`${isMobile ? 'text-base' : 'text-lg'} font-semibold text-foreground/70 mb-1`}>
+            نظام العملاء
+          </p>
+          <p className={`${isMobile ? 'text-xs' : 'text-sm'} text-muted-foreground`}>
+            نقاط الولاء والمدفوعات الآجلة
+          </p>
+        </div>
+      ),
+      icon: Users,
+      color: 'text-orange-500',
+      bgColor: 'bg-orange-500/10',
+      disabled: true,
+    },
+    {
+      title: 'الالتزامات المالية',
+      value: (
+        <div>
+          <p className={`${isMobile ? 'text-base' : 'text-lg'} font-semibold text-foreground/70 mb-1`}>
+            إدارة المصروفات
+          </p>
+          <p className={`${isMobile ? 'text-xs' : 'text-sm'} text-muted-foreground`}>
+            رواتب، إيجارات، فواتير الخدمات
+          </p>
+        </div>
+      ),
       icon: FileText,
-      color: 'text-gray-400',
-      bgColor: 'bg-gray-500/10',
+      color: 'text-red-500',
+      bgColor: 'bg-red-500/10',
       disabled: true,
     },
   ];
 
   const ComingSoonSection = () => (
-    <Card className="border-border/30 bg-card/30 backdrop-blur-sm opacity-75 mt-6">
-      <CardHeader>
-        <CardTitle className="text-lg text-right text-muted-foreground">
-          قريباً في الإصدار الثاني...
+    <Card className="border-border/30 bg-gradient-to-br from-card/50 to-card/30 backdrop-blur-sm mt-6 overflow-hidden relative">
+      <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-primary/5 to-transparent rounded-full -translate-y-16 translate-x-16"></div>
+      <CardHeader className="relative">
+        <CardTitle className="text-lg text-right text-foreground flex items-center justify-between">
+          <span>الإصدار الثاني - ميزات متقدمة</span>
+          <Badge variant="secondary" className="bg-primary/10 text-primary border-primary/20">
+            قريباً
+          </Badge>
         </CardTitle>
+        <p className="text-sm text-muted-foreground text-right">
+          ميزات جديدة ومتطورة لإدارة أفضل لمتجرك
+        </p>
       </CardHeader>
-      <CardContent>
-        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
+      <CardContent className="relative">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {comingSoonStats.map((stat, index) => (
-            <Card key={index} className="bg-muted/30 cursor-not-allowed border-dashed">
+            <Card key={index} className="bg-card/50 border-dashed border-2 border-border/50 hover:border-primary/30 transition-all duration-300 group">
               <CardContent className="p-4 sm:p-6">
-                <div className="flex items-center space-x-4">
-                  <div className={`p-3 rounded-xl ${stat.bgColor}`}>
+                <div className="flex items-start space-x-4">
+                  <div className={`p-3 rounded-xl ${stat.bgColor} group-hover:scale-105 transition-transform duration-200`}>
                     <stat.icon className={`h-5 w-5 sm:h-6 sm:w-6 ${stat.color}`} />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm sm:text-base text-muted-foreground truncate font-medium">{stat.title}</p>
+                    <p className="text-sm sm:text-base text-muted-foreground/80 truncate font-medium mb-2">{stat.title}</p>
                     <div className="mt-1">
                       {stat.value}
                     </div>
@@ -180,6 +211,12 @@ const Dashboard = ({ onSectionChange }: DashboardProps) => {
               </CardContent>
             </Card>
           ))}
+        </div>
+        
+        <div className="mt-6 p-4 bg-primary/5 border border-primary/20 rounded-lg">
+          <p className="text-sm text-center text-primary font-medium">
+            🚀 ستكون هذه الميزات متاحة في الإصدار الثاني من النظام
+          </p>
         </div>
       </CardContent>
     </Card>

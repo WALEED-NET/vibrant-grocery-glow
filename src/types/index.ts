@@ -100,3 +100,10 @@ export interface PurchaseTransaction {
   supplier?: string;
   notes?: string;
 }
+
+export interface Contact {
+  id: string;
+  name: string;
+  phone: string;
+  isWhatsAppActive?: boolean;
+}

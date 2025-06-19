@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -39,7 +40,8 @@ import {
 } from "@/components/ui/dialog";
 import { Textarea } from "@/components/ui/textarea";
 import QuickSearch from './QuickSearch';
-import { Product } from '@/types';
+import ContactSelector from './ContactSelector';
+import { Product, Contact } from '@/types';
 import ShortageItemRow from './ShortageItemRow';
 
 const ShortageBasket = () => {
@@ -58,6 +60,7 @@ const ShortageBasket = () => {
   const [categoryFilter, setCategoryFilter] = useState<string>('all');
   const [supplierName, setSupplierName] = useState('');
   const [supplierPhone, setSupplierPhone] = useState('');
+  const [selectedContact, setSelectedContact] = useState<Contact | null>(null);
   const [orderNotes, setOrderNotes] = useState('');
   const [showOrderDialog, setShowOrderDialog] = useState(false);
   const { toast } = useToast();
@@ -231,10 +234,11 @@ const ShortageBasket = () => {
       return;
     }
 
-    if (!supplierPhone) {
+    const phoneNumber = selectedContact ? selectedContact.phone : supplierPhone;
+    if (!phoneNumber) {
       toast({
         title: "تنبيه",
-        description: "يرجى إدخال رقم المورد",
+        description: "يرجى إدخال رقم المورد أو اختيار جهة اتصال",
         variant: "destructive",
       });
       return;
@@ -242,7 +246,7 @@ const ShortageBasket = () => {
 
     const orderText = generateOrderText();
     const encodedText = encodeURIComponent(orderText);
-    const whatsappUrl = `https://wa.me/${supplierPhone}?text=${encodedText}`;
+    const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodedText}`;
     
     window.open(whatsappUrl, '_blank');
     setShowOrderDialog(false);
@@ -365,15 +369,12 @@ const ShortageBasket = () => {
                           />
                         </div>
                         
-                        <div>
-                          <label className="text-sm font-medium mb-2 block">رقم الواتس اب</label>
-                          <Input
-                            placeholder="رقم الواتس اب (مع رمز البلد)"
-                            value={supplierPhone}
-                            onChange={(e) => setSupplierPhone(e.target.value)}
-                            dir="ltr"
-                          />
-                        </div>
+                        <ContactSelector
+                          selectedContact={selectedContact}
+                          onContactSelect={setSelectedContact}
+                          manualPhone={supplierPhone}
+                          onManualPhoneChange={setSupplierPhone}
+                        />
                         
                         <div>
                           <label className="text-sm font-medium mb-2 block">ملاحظات إضافية</label>
@@ -421,16 +422,9 @@ const ShortageBasket = () => {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2 gap-2">
-                <Input
-                  type="number"
-                  step="0.1"
-                  placeholder="الكمية المطلوبة"
-                  value={newShortageQuantity}
-                  onChange={(e) => setNewShortageQuantity(e.target.value)}
-                  className="w-full sm:w-32"
-                />
-                <div className="flex-1 min-w-0 sm:min-w-48">
+              <div className="space-y-4">
+                {/* QuickSearch Field - Now First */}
+                <div className="flex-1 min-w-0">
                   {!newShortageProduct ? (
                     <QuickSearch
                       onProductSelect={handleProductSelection}
@@ -446,14 +440,26 @@ const ShortageBasket = () => {
                     </div>
                   )}
                 </div>
-                <Button
-                  onClick={handleAddManualShortage}
-                  disabled={!newShortageProduct || !newShortageQuantity}
-                  className="flex items-center space-x-1 bg-[#388E3C] hover:bg-[#2E7D32]"
-                >
-                  <Plus className="h-4 w-4" />
-                  <span>إضافة</span>
-                </Button>
+                
+                {/* Quantity Field - Now Second */}
+                <div className="flex items-end space-x-2 gap-2">
+                  <Input
+                    type="number"
+                    step="0.1"
+                    placeholder="الكمية المطلوبة"
+                    value={newShortageQuantity}
+                    onChange={(e) => setNewShortageQuantity(e.target.value)}
+                    className="flex-1"
+                  />
+                  <Button
+                    onClick={handleAddManualShortage}
+                    disabled={!newShortageProduct || !newShortageQuantity}
+                    className="flex items-center space-x-1 bg-[#388E3C] hover:bg-[#2E7D32] px-6"
+                  >
+                    <Plus className="h-4 w-4" />
+                    <span>إضافة</span>
+                  </Button>
+                </div>
               </div>
             </CardContent>
           </Card>

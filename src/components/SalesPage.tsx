@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -7,22 +8,19 @@ import { Textarea } from '@/components/ui/textarea';
 import { Badge } from '@/components/ui/badge';
 import { useGroceryStore } from '@/stores/useGroceryStore';
 import { useToast } from '@/hooks/use-toast';
-import { TrendingUp, ShoppingCart, Plus, Minus, Trash2, Search } from 'lucide-react';
+import { TrendingUp, ShoppingCart, Plus, Minus, Trash2 } from 'lucide-react';
 import { SaleTransactionItem } from '@/types';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import QuickSearch from './QuickSearch';
 
 const SalesPage = () => {
   const { products, processSale } = useGroceryStore();
   const { toast } = useToast();
-  const [searchTerm, setSearchTerm] = useState('');
   const [saleItems, setSaleItems] = useState<SaleTransactionItem[]>([]);
   const [notes, setNotes] = useState('');
   const [paymentMethod, setPaymentMethod] = useState<'cash' | 'credit'>('cash');
 
-  const filteredProducts = products.filter(product =>
-    product.name.toLowerCase().includes(searchTerm.toLowerCase()) &&
-    product.currentQuantity > 0
-  );
+  const filteredProducts = products.filter(product => product.currentQuantity > 0);
 
   const addToSale = (product: any) => {
     const existingItem = saleItems.find(item => item.productId === product.id);
@@ -235,19 +233,15 @@ const SalesPage = () => {
           </CardContent>
         </Card>
 
-        {/* قائمة المنتجات */}
+        {/* قائمة المنتجات مع البحث المتقدم */}
         <Card>
           <CardHeader>
-            <CardTitle className="text-right flex items-center space-x-2">
-              <Search className="h-5 w-5 text-[#388E3C]" />
-              <span>اختيار المنتجات</span>
-            </CardTitle>
-            <div className="relative">
-              <Input
-                placeholder="البحث في المنتجات..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="text-right"
+            <CardTitle className="text-right">اختيار المنتجات</CardTitle>
+            <div className="space-y-4">
+              <QuickSearch
+                onProductSelect={addToSale}
+                productsToSearch={filteredProducts}
+                placeholder="ابحث بالاسم، الاختصار، أو الصوت..."
               />
             </div>
           </CardHeader>
@@ -262,6 +256,11 @@ const SalesPage = () => {
                     <h4 className="font-medium">{product.name}</h4>
                     <div className="flex items-center space-x-2 text-sm text-muted-foreground">
                       <Badge variant="outline">{product.currentQuantity} {product.unit}</Badge>
+                      {product.shortcutNumber && (
+                        <Badge variant="secondary" className="bg-[#388E3C]/10 text-[#388E3C]">
+                          #{product.shortcutNumber}
+                        </Badge>
+                      )}
                     </div>
                   </div>
                   <Button

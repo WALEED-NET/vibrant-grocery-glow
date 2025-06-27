@@ -1,10 +1,10 @@
 
-const CACHE_NAME = 'smart-grocery-v1.3.0'; // Updated version for splash screen
+const CACHE_NAME = 'smart-grocery-v1.4.0'; // Updated version for new icon
 const urlsToCache = [
   '/',
   '/index.html',
   '/manifest.json',
-  '/lovable-uploads/b0f53d14-5d80-496a-910c-5ae4198a8231.png',
+  '/lovable-uploads/a8f4606b-d4a6-4c3e-9193-312dd5a191c3.png',
   '/src/index.css'
 ];
 
@@ -13,7 +13,7 @@ self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then((cache) => {
-        console.log('✅ Opened cache with splash screen support');
+        console.log('✅ Opened cache with new app icon');
         return cache.addAll(urlsToCache);
       })
   );
@@ -38,7 +38,7 @@ self.addEventListener('activate', (event) => {
           }
         })
       ).then(() => {
-        console.log('✅ Service Worker activated with splash screen support');
+        console.log('✅ Service Worker activated with new app icon');
         return self.clients.claim();
       });
     })
@@ -86,7 +86,7 @@ self.addEventListener('fetch', (event) => {
         .catch(() => {
           // Fallback for offline scenarios
           if (event.request.destination === 'image') {
-            return caches.match('/lovable-uploads/b0f53d14-5d80-496a-910c-5ae4198a8231.png');
+            return caches.match('/lovable-uploads/a8f4606b-d4a6-4c3e-9193-312dd5a191c3.png');
           }
         })
     );

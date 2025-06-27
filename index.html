@@ -3,51 +3,76 @@
 <html lang="ar">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <title>البقالة الذكية - نظام إدارة البقالة الذكية</title>
-    <meta name="description" content="نظام إدارة ذكي وشامل للبقالات والمتاجر الصغيرة" />
+    <meta name="description" content="نظام إدارة ذكي وشامل للبقالات والمتاجر الصغيرة مع ميزات متقدمة للمبيعات والمخزون" />
     <meta name="author" content="Smart Grocery Management" />
-    <meta name="keywords" content="بقالة, إدارة المتاجر, نقاط البيع, مخزون, فواتير" />
+    <meta name="keywords" content="بقالة, إدارة المتاجر, نقاط البيع, مخزون, فواتير, PWA, تطبيق ويب" />
 
-    <!-- PWA Meta Tags -->
+    <!-- Enhanced PWA Meta Tags -->
     <meta name="theme-color" content="#388E3C" />
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#388E3C" />
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#2E7D32" />
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <meta name="apple-mobile-web-app-title" content="البقالة الذكية" />
     <meta name="msapplication-TileColor" content="#388E3C" />
     <meta name="msapplication-tap-highlight" content="no" />
+    <meta name="format-detection" content="telephone=no" />
 
-    <!-- App Icons -->
+    <!-- Enhanced App Icons -->
     <link rel="icon" href="/lovable-uploads/b0f53d14-5d80-496a-910c-5ae4198a8231.png" />
     <link rel="icon" type="image/png" sizes="32x32" href="/lovable-uploads/b0f53d14-5d80-496a-910c-5ae4198a8231.png" />
     <link rel="icon" type="image/png" sizes="16x16" href="/lovable-uploads/b0f53d14-5d80-496a-910c-5ae4198a8231.png" />
+    
+    <!-- Apple Touch Icons -->
     <link rel="apple-touch-icon" href="/lovable-uploads/b0f53d14-5d80-496a-910c-5ae4198a8231.png" />
+    <link rel="apple-touch-icon" sizes="72x72" href="/lovable-uploads/b0f53d14-5d80-496a-910c-5ae4198a8231.png" />
+    <link rel="apple-touch-icon" sizes="114x114" href="/lovable-uploads/b0f53d14-5d80-496a-910c-5ae4198a8231.png" />
+    <link rel="apple-touch-icon" sizes="144x144" href="/lovable-uploads/b0f53d14-5d80-496a-910c-5ae4198a8231.png" />
     <link rel="apple-touch-icon" sizes="152x152" href="/lovable-uploads/b0f53d14-5d80-496a-910c-5ae4198a8231.png" />
     <link rel="apple-touch-icon" sizes="180x180" href="/lovable-uploads/b0f53d14-5d80-496a-910c-5ae4198a8231.png" />
+    
+    <!-- Apple Splash Screens -->
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <link rel="apple-touch-startup-image" href="/lovable-uploads/b0f53d14-5d80-496a-910c-5ae4198a8231.png" />
+    
     <link rel="mask-icon" href="/lovable-uploads/b0f53d14-5d80-496a-910c-5ae4198a8231.png" color="#388E3C" />
 
     <!-- Manifest -->
     <link rel="manifest" href="/manifest.json" />
 
-    <!-- Open Graph -->
-    <meta property="og:title" content="البقالة الذكية - نظام إدارة البقالة الذكية" />
-    <meta property="og:description" content="نظام إدارة ذكي وشامل للبقالات والمتاجر الصغيرة" />
+    <!-- Enhanced Open Graph -->
+    <meta property="og:title" content="البقالة الذكية - نظام إدارة المتاجر الذكي" />
+    <meta property="og:description" content="نظام إدارة ذكي وشامل للبقالات والمتاجر الصغيرة مع ميزات متقدمة للمبيعات والمخزون" />
     <meta property="og:type" content="website" />
     <meta property="og:image" content="/lovable-uploads/b0f53d14-5d80-496a-910c-5ae4198a8231.png" />
+    <meta property="og:image:width" content="512" />
+    <meta property="og:image:height" content="512" />
     <meta property="og:locale" content="ar_SA" />
+    <meta property="og:site_name" content="البقالة الذكية" />
 
-    <!-- Twitter Card -->
+    <!-- Enhanced Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="البقالة الذكية" />
+    <meta name="twitter:title" content="البقالة الذكية - نظام إدارة المتاجر الذكي" />
     <meta name="twitter:description" content="نظام إدارة ذكي وشامل للبقالات والمتاجر الصغيرة" />
     <meta name="twitter:image" content="/lovable-uploads/b0f53d14-5d80-496a-910c-5ae4198a8231.png" />
+    <meta name="twitter:image:alt" content="البقالة الذكية - أيقونة التطبيق" />
 
     <!-- Preload critical resources -->
     <link rel="preload" as="style" href="/src/index.css" />
+    <link rel="dns-prefetch" href="//fonts.googleapis.com" />
+    
+    <!-- Performance optimizations -->
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    
+    <!-- Security headers -->
+    <meta http-equiv="X-Content-Type-Options" content="nosniff" />
+    <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin" />
   </head>
 
-  <body>
+  <body style="margin: 0; overflow-x: hidden;">
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>

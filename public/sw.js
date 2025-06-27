@@ -1,10 +1,11 @@
 
-const CACHE_NAME = 'smart-grocery-v1.2.6'; // تحديث إصدار الكاش لضمان التحديث
+const CACHE_NAME = 'smart-grocery-v1.3.0'; // Updated version for splash screen
 const urlsToCache = [
   '/',
   '/index.html',
   '/manifest.json',
-  '/lovable-uploads/b0f53d14-5d80-496a-910c-5ae4198a8231.png'
+  '/lovable-uploads/b0f53d14-5d80-496a-910c-5ae4198a8231.png',
+  '/src/index.css'
 ];
 
 // تثبيت Service Worker
@@ -12,7 +13,7 @@ self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then((cache) => {
-        console.log('Opened cache');
+        console.log('✅ Opened cache with splash screen support');
         return cache.addAll(urlsToCache);
       })
   );
@@ -32,24 +33,26 @@ self.addEventListener('activate', (event) => {
       return Promise.all(
         cacheNames.map((cacheName) => {
           if (cacheName !== CACHE_NAME) {
-            console.log('Deleting old cache:', cacheName);
+            console.log('🗑️ Deleting old cache:', cacheName);
             return caches.delete(cacheName);
           }
         })
-      ).then(() => self.clients.claim()); // السيطرة على العملاء المفتوحين
+      ).then(() => {
+        console.log('✅ Service Worker activated with splash screen support');
+        return self.clients.claim();
+      });
     })
   );
 });
 
-// استلام الطلبات (Network first for navigation, Cache first for others)
+// استلام الطلبات مع تحسين للشاشة الترحيبية
 self.addEventListener('fetch', (event) => {
-  // إستراتيجية "Network First" لطلبات التنقل (الصفحة الرئيسية)
-  if (event.request.mode === 'navigate') {
+  // تحسين خاص للشاشة الرئيسية والموارد الحرجة
+  if (event.request.mode === 'navigate' || event.request.url.includes('index.html')) {
     event.respondWith(
       fetch(event.request)
         .then(response => {
-          // إذا نجح الطلب من الشبكة، قم بتخزين النسخة الجديدة في الكاش
-          // هذا يضمن أن الوضع غير المتصل بالإنترنت سيستخدم أحدث إصدار متاح
+          // تخزين النسخة الجديدة في الكاش
           const responseToCache = response.clone();
           caches.open(CACHE_NAME).then(cache => {
             cache.put(event.request, responseToCache);
@@ -57,17 +60,34 @@ self.addEventListener('fetch', (event) => {
           return response;
         })
         .catch(() => {
-          // إذا فشل الطلب من الشبكة (المستخدم غير متصل)، حاول جلب الملف من الكاش
-          return caches.match(event.request);
+          // استخدام الكاش عند عدم توفر الاتصال
+          return caches.match(event.request).then(cachedResponse => {
+            return cachedResponse || caches.match('/');
+          });
         })
     );
   } else {
-    // إستراتيجية "Cache First" للملفات الأخرى (CSS, JS, images)
+    // إستراتيجية "Cache First" للملفات الأخرى
     event.respondWith(
       caches.match(event.request)
         .then((response) => {
-          // إرجاع الاستجابة من الكاش إذا وُجدت، وإلا اطلبها من الشبكة
-          return response || fetch(event.request);
+          if (response) {
+            return response;
+          }
+          return fetch(event.request).then(fetchResponse => {
+            // تخزين الموارد الجديدة في الكاش
+            const responseToCache = fetchResponse.clone();
+            caches.open(CACHE_NAME).then(cache => {
+              cache.put(event.request, responseToCache);
+            });
+            return fetchResponse;
+          });
+        })
+        .catch(() => {
+          // Fallback for offline scenarios
+          if (event.request.destination === 'image') {
+            return caches.match('/lovable-uploads/b0f53d14-5d80-496a-910c-5ae4198a8231.png');
+          }
         })
     );
   }

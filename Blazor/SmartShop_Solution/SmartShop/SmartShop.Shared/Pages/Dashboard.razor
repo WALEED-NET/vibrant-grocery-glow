@@ -1,4 +1,4 @@
-﻿@using SmartShop.Shared.Services
+@using SmartShop.Shared.Services
 @inject IFormFactor FormFactor
 @inject NavigationManager Navigation
 
@@ -7,8 +7,8 @@
 <div class="page-content">
     <!-- Stats Grid -->
     <div class="stats-grid">
-        <div class="stat-card">
-            <div class="stat-icon">
+        <div class="stat-card" @onclick="() => Navigation.NavigateTo('/products')">
+            <div class="stat-icon products-icon">
                 <i data-lucide="package"></i>
             </div>
             <div class="stat-content">
@@ -18,7 +18,7 @@
         </div>
 
         <div class="stat-card">
-            <div class="stat-icon">
+            <div class="stat-icon inventory-icon">
                 <i data-lucide="wallet"></i>
             </div>
             <div class="stat-content">
@@ -37,7 +37,7 @@
         </div>
 
         <div class="stat-card shortage-card" @onclick="NavigateToShortage">
-            <div class="stat-icon">
+            <div class="stat-icon shortage-icon">
                 <i data-lucide="alert-triangle"></i>
             </div>
             <div class="stat-content">
@@ -47,7 +47,7 @@
         </div>
 
         <div class="stat-card">
-            <div class="stat-icon">
+            <div class="stat-icon profit-icon">
                 <i data-lucide="trending-up"></i>
             </div>
             <div class="stat-content">
@@ -106,7 +106,10 @@
         <!-- Recent Updates Card -->
         <div class="card recent-updates-card">
             <div class="card-header">
-                <h2 class="card-title">آخر تحديثات الأسعار</h2>
+                <h2 class="card-title">
+                    <i data-lucide="clock"></i>
+                    <span>آخر تحديثات الأسعار</span>
+                </h2>
             </div>
             <div class="card-content">
                 <div class="updates-list">
@@ -130,12 +133,62 @@
         </div>
     </div>
 
+    <!-- Quick Actions -->
+    <div class="quick-actions">
+        <h2 class="section-title">
+            <i data-lucide="zap"></i>
+            <span>إجراءات سريعة</span>
+        </h2>
+        <div class="actions-grid">
+            <button class="action-card" @onclick="() => Navigation.NavigateTo('/products')">
+                <div class="action-icon products-action">
+                    <i data-lucide="plus"></i>
+                </div>
+                <div class="action-content">
+                    <h3>إضافة منتج</h3>
+                    <p>إضافة منتج جديد للمخزون</p>
+                </div>
+            </button>
+
+            <button class="action-card" @onclick="() => Navigation.NavigateTo('/sales')">
+                <div class="action-icon sales-action">
+                    <i data-lucide="shopping-cart"></i>
+                </div>
+                <div class="action-content">
+                    <h3>عملية بيع</h3>
+                    <p>تسجيل عملية بيع جديدة</p>
+                </div>
+            </button>
+
+            <button class="action-card" @onclick="() => Navigation.NavigateTo('/purchase')">
+                <div class="action-icon purchase-action">
+                    <i data-lucide="shopping-bag"></i>
+                </div>
+                <div class="action-content">
+                    <h3>عملية شراء</h3>
+                    <p>تسجيل عملية شراء جديدة</p>
+                </div>
+            </button>
+
+            <button class="action-card" @onclick="() => Navigation.NavigateTo('/reports')">
+                <div class="action-icon reports-action">
+                    <i data-lucide="bar-chart-3"></i>
+                </div>
+                <div class="action-content">
+                    <h3>التقارير</h3>
+                    <p>عرض تقارير المبيعات</p>
+                </div>
+            </button>
+        </div>
+    </div>
+
     <!-- Coming Soon Section -->
     <div class="card coming-soon-card">
         <div class="card-header">
             <h2 class="card-title">
+                <i data-lucide="rocket"></i>
                 <span>الإصدار الثاني - ميزات متقدمة</span>
-                <span class="badge">قريباً</span>
+                <span class="badge coming-soon-badge">قريباً</span>
             </h2>
             <p class="card-description">ميزات جديدة ومتطورة لإدارة أفضل لمتجرك</p>
         </div>

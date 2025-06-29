@@ -88,6 +88,12 @@
         </div>
     </aside>
 
+    <!-- Sidebar Overlay for Mobile -->
+    @if (sidebarOpen)
+    {
+        <div class="sidebar-overlay" @onclick="CloseSidebar"></div>
+    }
+
     <!-- Main Content -->
     <div class="main-content">
         <!-- Header -->

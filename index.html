@@ -1,79 +1,466 @@
-
 <!DOCTYPE html>
-<html lang="ar">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>البقالة الذكية - نظام إدارة البقالة الذكية</title>
-    <meta name="description" content="نظام إدارة ذكي وشامل للبقالات والمتاجر الصغيرة مع ميزات متقدمة للمبيعات والمخزون" />
-    <meta name="author" content="Smart Grocery Management" />
-    <meta name="keywords" content="بقالة, إدارة المتاجر, نقاط البيع, مخزون, فواتير, PWA, تطبيق ويب" />
-
-    <!-- Enhanced PWA Meta Tags -->
-    <meta name="theme-color" content="#388E3C" />
-    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#388E3C" />
-    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#2E7D32" />
-    <meta name="mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-    <meta name="apple-mobile-web-app-title" content="البقالة الذكية" />
-    <meta name="msapplication-TileColor" content="#388E3C" />
-    <meta name="msapplication-tap-highlight" content="no" />
-    <meta name="format-detection" content="telephone=no" />
-
-    <!-- Enhanced App Icons -->
-    <link rel="icon" href="/lovable-uploads/a8f4606b-d4a6-4c3e-9193-312dd5a191c3.png" />
-    <link rel="icon" type="image/png" sizes="32x32" href="/lovable-uploads/a8f4606b-d4a6-4c3e-9193-312dd5a191c3.png" />
-    <link rel="icon" type="image/png" sizes="16x16" href="/lovable-uploads/a8f4606b-d4a6-4c3e-9193-312dd5a191c3.png" />
+    <meta name="description" content="نظام إدارة ذكي وشامل للبقالات والمتاجر الصغيرة مع ميزات متقدمة للمبيعات والمخزون">
     
-    <!-- Apple Touch Icons -->
-    <link rel="apple-touch-icon" href="/lovable-uploads/a8f4606b-d4a6-4c3e-9193-312dd5a191c3.png" />
-    <link rel="apple-touch-icon" sizes="72x72" href="/lovable-uploads/a8f4606b-d4a6-4c3e-9193-312dd5a191c3.png" />
-    <link rel="apple-touch-icon" sizes="114x114" href="/lovable-uploads/a8f4606b-d4a6-4c3e-9193-312dd5a191c3.png" />
-    <link rel="apple-touch-icon" sizes="144x144" href="/lovable-uploads/a8f4606b-d4a6-4c3e-9193-312dd5a191c3.png" />
-    <link rel="apple-touch-icon" sizes="152x152" href="/lovable-uploads/a8f4606b-d4a6-4c3e-9193-312dd5a191c3.png" />
-    <link rel="apple-touch-icon" sizes="180x180" href="/lovable-uploads/a8f4606b-d4a6-4c3e-9193-312dd5a191c3.png" />
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
-    <!-- Apple Splash Screens -->
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-    <link rel="apple-touch-startup-image" href="/lovable-uploads/a8f4606b-d4a6-4c3e-9193-312dd5a191c3.png" />
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lucide/0.263.1/lucide.min.css">
     
-    <link rel="mask-icon" href="/lovable-uploads/a8f4606b-d4a6-4c3e-9193-312dd5a191c3.png" color="#388E3C" />
+    <!-- Styles -->
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/components.css">
+    <link rel="stylesheet" href="styles/dashboard.css">
+    <link rel="stylesheet" href="styles/responsive.css">
+</head>
+<body>
+    <!-- Splash Screen -->
+    <div id="splashScreen" class="splash-screen">
+        <div class="splash-content">
+            <div class="app-icon">
+                <div class="icon-container">
+                    <i data-lucide="shopping-cart"></i>
+                    <div class="icon-badge">
+                        <i data-lucide="zap"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="app-info">
+                <h1>البقالة الذكية</h1>
+                <p>نظام إدارة المتاجر الذكي</p>
+            </div>
+            <div class="loading-animation">
+                <div class="loading-dots">
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                </div>
+                <p>جاري التحميل...</p>
+            </div>
+        </div>
+    </div>
 
-    <!-- Manifest -->
-    <link rel="manifest" href="/manifest.json" />
+    <!-- Main App -->
+    <div id="mainApp" class="main-app hidden">
+        <!-- Sidebar -->
+        <aside id="sidebar" class="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-brand">
+                    <div class="brand-icon">
+                        <i data-lucide="shopping-cart"></i>
+                    </div>
+                    <div class="brand-text">
+                        <h1>نظام إدارة البقالة الذكية</h1>
+                        <p>إدارة شاملة للمخزون والمبيعات</p>
+                    </div>
+                </div>
+            </div>
 
-    <!-- Enhanced Open Graph -->
-    <meta property="og:title" content="البقالة الذكية - نظام إدارة المتاجر الذكي" />
-    <meta property="og:description" content="نظام إدارة ذكي وشامل للبقالات والمتاجر الصغيرة مع ميزات متقدمة للمبيعات والمخزون" />
-    <meta property="og:type" content="website" />
-    <meta property="og:image" content="/lovable-uploads/a8f4606b-d4a6-4c3e-9193-312dd5a191c3.png" />
-    <meta property="og:image:width" content="512" />
-    <meta property="og:image:height" content="512" />
-    <meta property="og:locale" content="ar_SA" />
-    <meta property="og:site_name" content="البقالة الذكية" />
+            <div class="sidebar-content">
+                <div class="sidebar-section">
+                    <div class="section-label">القوائم الرئيسية</div>
+                    <nav class="sidebar-nav">
+                        <a href="#" class="nav-item active" data-section="dashboard">
+                            <i data-lucide="bar-chart-3"></i>
+                            <span>لوحة التحكم</span>
+                        </a>
+                        <a href="#" class="nav-item" data-section="products">
+                            <i data-lucide="package"></i>
+                            <span>إدارة المنتجات</span>
+                        </a>
+                        <a href="#" class="nav-item" data-section="sales">
+                            <i data-lucide="trending-up"></i>
+                            <span>عمليات البيع</span>
+                        </a>
+                        <a href="#" class="nav-item" data-section="purchase">
+                            <i data-lucide="shopping-bag"></i>
+                            <span>عمليات الشراء</span>
+                        </a>
+                        <a href="#" class="nav-item" data-section="shortage">
+                            <i data-lucide="shopping-cart"></i>
+                            <span>سلة النواقص</span>
+                        </a>
+                        <a href="#" class="nav-item" data-section="exchange-rate">
+                            <i data-lucide="dollar-sign"></i>
+                            <span>سعر الصرف</span>
+                        </a>
+                    </nav>
+                </div>
 
-    <!-- Enhanced Twitter Card -->
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="البقالة الذكية - نظام إدارة المتاجر الذكي" />
-    <meta name="twitter:description" content="نظام إدارة ذكي وشامل للبقالات والمتاجر الصغيرة" />
-    <meta name="twitter:image" content="/lovable-uploads/a8f4606b-d4a6-4c3e-9193-312dd5a191c3.png" />
-    <meta name="twitter:image:alt" content="البقالة الذكية - أيقونة التطبيق" />
+                <div class="sidebar-separator"></div>
 
-    <!-- Preload critical resources -->
-    <link rel="preload" as="style" href="/src/index.css" />
-    <link rel="dns-prefetch" href="//fonts.googleapis.com" />
-    
-    <!-- Performance optimizations -->
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    
-    <!-- Security headers -->
-    <meta http-equiv="X-Content-Type-Options" content="nosniff" />
-    <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin" />
-  </head>
+                <div class="sidebar-section">
+                    <div class="section-label">الإدارة والتقارير</div>
+                    <nav class="sidebar-nav">
+                        <a href="#" class="nav-item" data-section="units">
+                            <i data-lucide="ruler"></i>
+                            <span>إدارة الوحدات</span>
+                        </a>
+                        <a href="#" class="nav-item" data-section="reports">
+                            <i data-lucide="file-text"></i>
+                            <span>التقارير</span>
+                        </a>
+                    </nav>
+                </div>
 
-  <body style="margin: 0; overflow-x: hidden;">
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
+                <div class="sidebar-separator"></div>
+
+                <div class="sidebar-section">
+                    <div class="section-label">الإعدادات</div>
+                    <nav class="sidebar-nav">
+                        <a href="#" class="nav-item" data-section="settings">
+                            <i data-lucide="settings"></i>
+                            <span>إعدادات التطبيق</span>
+                        </a>
+                        <a href="#" class="nav-item" data-section="profile">
+                            <i data-lucide="user"></i>
+                            <span>بيانات الحساب</span>
+                        </a>
+                    </nav>
+                </div>
+            </div>
+
+            <div class="sidebar-footer">
+                <a href="#" class="nav-item logout">
+                    <i data-lucide="log-out"></i>
+                    <span>تسجيل الخروج</span>
+                </a>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Header -->
+            <header class="header">
+                <div class="header-content">
+                    <div class="header-left">
+                        <button id="sidebarToggle" class="sidebar-toggle">
+                            <i data-lucide="menu"></i>
+                        </button>
+                        <div class="page-title">
+                            <h1 id="pageTitle">لوحة التحكم</h1>
+                        </div>
+                    </div>
+                    <div class="header-right">
+                        <button class="app-version-btn">
+                            <i data-lucide="info"></i>
+                            <span>معلومات التطبيق</span>
+                        </button>
+                        <button class="notifications-btn">
+                            <i data-lucide="bell"></i>
+                            <span class="notification-badge">3</span>
+                        </button>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Page Content -->
+            <main class="page-content">
+                <!-- Dashboard Content -->
+                <div id="dashboardContent" class="content-section active">
+                    <!-- Stats Grid -->
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i data-lucide="package"></i>
+                            </div>
+                            <div class="stat-content">
+                                <div class="stat-label">إجمالي المنتجات</div>
+                                <div class="stat-value" id="totalProducts">20</div>
+                            </div>
+                        </div>
+
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i data-lucide="wallet"></i>
+                            </div>
+                            <div class="stat-content">
+                                <div class="stat-label">قيمة المخزون</div>
+                                <div class="stat-value">
+                                    <div class="primary-value">
+                                        <span id="inventoryValueYER">2,450,000</span>
+                                        <span class="currency">ر.ي</span>
+                                    </div>
+                                    <div class="secondary-value">
+                                        <span>≈ 3,603</span>
+                                        <span class="currency">ر.س</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="stat-card shortage-card" onclick="navigateToShortage()">
+                            <div class="stat-icon">
+                                <i data-lucide="alert-triangle"></i>
+                            </div>
+                            <div class="stat-content">
+                                <div class="stat-label">المنتجات الناقصة</div>
+                                <div class="stat-value" id="shortageCount">4</div>
+                            </div>
+                        </div>
+
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i data-lucide="trending-up"></i>
+                            </div>
+                            <div class="stat-content">
+                                <div class="stat-label">الربح اليومي</div>
+                                <div class="stat-value">
+                                    <div class="primary-value">
+                                        <span id="dailyProfitYER">125,000</span>
+                                        <span class="currency">ر.ي</span>
+                                    </div>
+                                    <div class="secondary-value">
+                                        <span>≈ 184</span>
+                                        <span class="currency">ر.س</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Main Content Grid -->
+                    <div class="main-grid">
+                        <!-- Exchange Rate Card -->
+                        <div class="card exchange-rate-card">
+                            <div class="card-header">
+                                <h2 class="card-title">
+                                    <i data-lucide="dollar-sign"></i>
+                                    <span>سعر الصرف الحالي</span>
+                                </h2>
+                            </div>
+                            <div class="card-content">
+                                <div class="exchange-rate-display">
+                                    <div class="rate-value">
+                                        <span id="currentExchangeRate">680</span>
+                                        <span class="currency">ر.ي</span>
+                                    </div>
+                                    <div class="rate-description">
+                                        سعر الريال السعودي الواحد بالريال اليمني
+                                    </div>
+                                    <div class="rate-examples">
+                                        <div class="rate-example">
+                                            <div class="example-label">10 ر.س</div>
+                                            <div class="example-value">6,800</div>
+                                        </div>
+                                        <div class="rate-example">
+                                            <div class="example-label">50 ر.س</div>
+                                            <div class="example-value">34,000</div>
+                                        </div>
+                                        <div class="rate-example">
+                                            <div class="example-label">100 ر.س</div>
+                                            <div class="example-value">68,000</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Recent Updates Card -->
+                        <div class="card recent-updates-card">
+                            <div class="card-header">
+                                <h2 class="card-title">آخر تحديثات الأسعار</h2>
+                            </div>
+                            <div class="card-content">
+                                <div class="updates-list" id="recentUpdates">
+                                    <div class="update-item">
+                                        <div class="update-info">
+                                            <div class="product-name">سكر أبيض</div>
+                                            <div class="update-date">2024-01-15</div>
+                                        </div>
+                                        <div class="update-price">
+                                            <div class="new-price">6,280 ر.ي</div>
+                                            <div class="price-change positive">+500 ر.ي</div>
+                                        </div>
+                                    </div>
+                                    <div class="update-item">
+                                        <div class="update-info">
+                                            <div class="product-name">أرز بسمتي</div>
+                                            <div class="update-date">2024-01-14</div>
+                                        </div>
+                                        <div class="update-price">
+                                            <div class="new-price">8,960 ر.ي</div>
+                                            <div class="price-change positive">+800 ر.ي</div>
+                                        </div>
+                                    </div>
+                                    <div class="update-item">
+                                        <div class="update-info">
+                                            <div class="product-name">زيت دوار الشمس</div>
+                                            <div class="update-date">2024-01-13</div>
+                                        </div>
+                                        <div class="update-price">
+                                            <div class="new-price">11,540 ر.ي</div>
+                                            <div class="price-change positive">+1,000 ر.ي</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Coming Soon Section -->
+                    <div class="card coming-soon-card">
+                        <div class="card-header">
+                            <h2 class="card-title">
+                                <span>الإصدار الثاني - ميزات متقدمة</span>
+                                <span class="badge">قريباً</span>
+                            </h2>
+                            <p class="card-description">ميزات جديدة ومتطورة لإدارة أفضل لمتجرك</p>
+                        </div>
+                        <div class="card-content">
+                            <div class="coming-soon-grid">
+                                <div class="feature-card">
+                                    <div class="feature-icon">
+                                        <i data-lucide="database"></i>
+                                    </div>
+                                    <div class="feature-content">
+                                        <h3>إدارة المخزون المتقدمة</h3>
+                                        <p>تتبع دقيق للمخزون</p>
+                                        <small>إشعارات ذكية وتحليلات متقدمة</small>
+                                    </div>
+                                </div>
+                                <div class="feature-card">
+                                    <div class="feature-icon">
+                                        <i data-lucide="bar-chart-3"></i>
+                                    </div>
+                                    <div class="feature-content">
+                                        <h3>تقارير وتحليلات</h3>
+                                        <p>تقارير شاملة</p>
+                                        <small>رسوم بيانية وإحصائيات مفصلة</small>
+                                    </div>
+                                </div>
+                                <div class="feature-card">
+                                    <div class="feature-icon">
+                                        <i data-lucide="users"></i>
+                                    </div>
+                                    <div class="feature-content">
+                                        <h3>إدارة العملاء</h3>
+                                        <p>نظام العملاء</p>
+                                        <small>نقاط الولاء والمدفوعات الآجلة</small>
+                                    </div>
+                                </div>
+                                <div class="feature-card">
+                                    <div class="feature-icon">
+                                        <i data-lucide="file-text"></i>
+                                    </div>
+                                    <div class="feature-content">
+                                        <h3>الالتزامات المالية</h3>
+                                        <p>إدارة المصروفات</p>
+                                        <small>رواتب، إيجارات، فواتير الخدمات</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="coming-soon-notice">
+                                🚀 ستكون هذه الميزات متاحة في الإصدار الثاني من النظام
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Other Content Sections (Hidden by default) -->
+                <div id="productsContent" class="content-section">
+                    <h2>إدارة المنتجات</h2>
+                    <p>سيتم إضافة محتوى إدارة المنتجات هنا</p>
+                </div>
+
+                <div id="salesContent" class="content-section">
+                    <h2>عمليات البيع</h2>
+                    <p>سيتم إضافة محتوى عمليات البيع هنا</p>
+                </div>
+
+                <!-- Add more content sections as needed -->
+            </main>
+        </div>
+
+        <!-- Bottom Navigation (Mobile) -->
+        <nav class="bottom-nav">
+            <a href="#" class="bottom-nav-item active" data-section="dashboard">
+                <i data-lucide="bar-chart-3"></i>
+                <span>الرئيسية</span>
+            </a>
+            <a href="#" class="bottom-nav-item" data-section="products">
+                <i data-lucide="package"></i>
+                <span>المنتجات</span>
+            </a>
+            <a href="#" class="bottom-nav-item" data-section="sales">
+                <i data-lucide="trending-up"></i>
+                <span>البيع</span>
+            </a>
+            <a href="#" class="bottom-nav-item" data-section="purchase">
+                <i data-lucide="shopping-bag"></i>
+                <span>الشراء</span>
+            </a>
+            <button class="bottom-nav-item more-btn" id="moreMenuBtn">
+                <i data-lucide="more-horizontal"></i>
+                <span>المزيد</span>
+            </button>
+        </nav>
+
+        <!-- More Menu Modal (Mobile) -->
+        <div id="moreMenuModal" class="more-menu-modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>المزيد من الخيارات</h3>
+                    <p>اختر القسم الذي تريد الوصول إليه</p>
+                </div>
+                <div class="modal-body">
+                    <a href="#" class="more-menu-item" data-section="shortage">
+                        <i data-lucide="shopping-cart"></i>
+                        <div class="item-content">
+                            <div class="item-title">سلة النواقص</div>
+                            <div class="item-description">إدارة المنتجات الناقصة</div>
+                        </div>
+                    </a>
+                    <a href="#" class="more-menu-item" data-section="exchange-rate">
+                        <i data-lucide="dollar-sign"></i>
+                        <div class="item-content">
+                            <div class="item-title">سعر الصرف</div>
+                            <div class="item-description">تحديث أسعار الصرف</div>
+                        </div>
+                    </a>
+                    <a href="#" class="more-menu-item" data-section="units">
+                        <i data-lucide="ruler"></i>
+                        <div class="item-content">
+                            <div class="item-title">إدارة الوحدات</div>
+                            <div class="item-description">إضافة وتعديل وحدات القياس</div>
+                        </div>
+                    </a>
+                    <a href="#" class="more-menu-item" data-section="reports">
+                        <i data-lucide="file-text"></i>
+                        <div class="item-content">
+                            <div class="item-title">التقارير</div>
+                            <div class="item-description">تقارير المبيعات والمخزون</div>
+                        </div>
+                    </a>
+                    <a href="#" class="more-menu-item" data-section="settings">
+                        <i data-lucide="settings"></i>
+                        <div class="item-content">
+                            <div class="item-title">الإعدادات</div>
+                            <div class="item-description">إعدادات التطبيق العامة</div>
+                        </div>
+                    </a>
+                    <a href="#" class="more-menu-item" data-section="profile">
+                        <i data-lucide="user"></i>
+                        <div class="item-content">
+                            <div class="item-title">بيانات الحساب</div>
+                            <div class="item-description">إدارة بيانات المستخدم</div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/dashboard.js"></script>
+</body>
 </html>

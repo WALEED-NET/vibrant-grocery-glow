@@ -1,0 +1,400 @@
+/* Responsive Design */
+
+/* Mobile First Approach */
+
+/* Small devices (landscape phones, 576px and up) */
+@media (max-width: 576px) {
+    :root {
+        --spacing-xs: 0.125rem;
+        --spacing-sm: 0.25rem;
+        --spacing-md: 0.5rem;
+        --spacing-lg: 1rem;
+        --spacing-xl: 1.5rem;
+        --spacing-2xl: 2rem;
+    }
+
+    .page-content {
+        padding: var(--spacing-md);
+        padding-bottom: calc(var(--bottom-nav-height) + var(--spacing-md));
+    }
+
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: var(--spacing-sm);
+    }
+
+    .stat-card {
+        padding: var(--spacing-md);
+        flex-direction: column;
+        text-align: center;
+        gap: var(--spacing-sm);
+    }
+
+    .stat-icon {
+        padding: var(--spacing-sm);
+    }
+
+    .stat-icon i {
+        font-size: var(--font-size-lg);
+    }
+
+    .stat-value {
+        font-size: var(--font-size-xl);
+    }
+
+    .primary-value {
+        flex-direction: column;
+        gap: 2px;
+    }
+
+    .secondary-value {
+        font-size: var(--font-size-xs);
+    }
+
+    .main-grid {
+        grid-template-columns: 1fr;
+        gap: var(--spacing-lg);
+    }
+
+    .exchange-rate-display {
+        padding: var(--spacing-lg);
+    }
+
+    .rate-value {
+        font-size: var(--font-size-3xl);
+        flex-direction: column;
+        gap: var(--spacing-xs);
+    }
+
+    .rate-description {
+        font-size: var(--font-size-base);
+        margin-bottom: var(--spacing-lg);
+    }
+
+    .rate-examples {
+        grid-template-columns: 1fr;
+        gap: var(--spacing-sm);
+    }
+
+    .rate-example {
+        padding: var(--spacing-sm);
+    }
+
+    .coming-soon-grid {
+        grid-template-columns: 1fr;
+        gap: var(--spacing-sm);
+    }
+
+    .feature-card {
+        padding: var(--spacing-md);
+    }
+
+    .feature-icon {
+        padding: var(--spacing-sm);
+        margin-bottom: var(--spacing-sm);
+    }
+
+    .feature-icon i {
+        font-size: var(--font-size-lg);
+    }
+
+    .update-item {
+        padding: var(--spacing-md);
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--spacing-sm);
+    }
+
+    .update-price {
+        text-align: right;
+        width: 100%;
+    }
+}
+
+/* Medium devices (tablets, 768px and up) */
+@media (max-width: 768px) {
+    .sidebar {
+        transform: translateX(100%);
+        transition: transform var(--transition-normal);
+    }
+
+    .sidebar.open {
+        transform: translateX(0);
+    }
+
+    .main-content {
+        margin-right: 0;
+    }
+
+    .sidebar-toggle {
+        display: flex;
+    }
+
+    .bottom-nav {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+    }
+
+    .page-title h1 {
+        font-size: var(--font-size-base);
+    }
+
+    .header-content {
+        padding: 0 var(--spacing-md);
+    }
+
+    .app-version-btn span,
+    .notifications-btn span {
+        display: none;
+    }
+
+    .brand-text h1 {
+        font-size: var(--font-size-xs);
+    }
+
+    .brand-text p {
+        display: none;
+    }
+
+    .section-label {
+        font-size: 10px;
+    }
+
+    .nav-item {
+        padding: var(--spacing-xs) var(--spacing-sm);
+        font-size: var(--font-size-xs);
+    }
+
+    .nav-item i {
+        font-size: var(--font-size-sm);
+    }
+
+    .card-header {
+        padding: var(--spacing-md);
+    }
+
+    .card-content {
+        padding: var(--spacing-md);
+    }
+
+    .card-title {
+        font-size: var(--font-size-lg);
+    }
+
+    .card-title i {
+        font-size: var(--font-size-xl);
+    }
+}
+
+/* Large devices (desktops, 992px and up) */
+@media (min-width: 992px) {
+    .stats-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+
+    .main-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .coming-soon-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .rate-examples {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+/* Extra large devices (large desktops, 1200px and up) */
+@media (min-width: 1200px) {
+    .page-content {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: var(--spacing-2xl);
+    }
+
+    .stats-grid {
+        gap: var(--spacing-2xl);
+    }
+
+    .main-grid {
+        gap: var(--spacing-2xl);
+    }
+
+    .coming-soon-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+
+    .stat-card {
+        padding: var(--spacing-2xl);
+    }
+
+    .exchange-rate-display {
+        padding: var(--spacing-2xl) var(--spacing-2xl);
+    }
+
+    .rate-value {
+        font-size: 5rem;
+    }
+}
+
+/* Ultra wide screens (1400px and up) */
+@media (min-width: 1400px) {
+    .page-content {
+        max-width: 1400px;
+    }
+}
+
+/* High DPI displays */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+    .stat-icon,
+    .feature-icon,
+    .brand-icon {
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+}
+
+/* Reduced motion preferences */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+
+    .animate-fade-in-up,
+    .animate-fade-in,
+    .animate-slide-in-right,
+    .animate-pulse,
+    .animate-bounce {
+        animation: none;
+    }
+}
+
+/* Dark mode support (if needed in future) */
+@media (prefers-color-scheme: dark) {
+    /* Dark mode styles can be added here */
+}
+
+/* Print styles */
+@media print {
+    .sidebar,
+    .header,
+    .bottom-nav,
+    .more-menu-modal {
+        display: none !important;
+    }
+
+    .main-content {
+        margin-right: 0 !important;
+    }
+
+    .page-content {
+        padding: 0 !important;
+    }
+
+    .card {
+        box-shadow: none !important;
+        border: 1px solid #ccc !important;
+        break-inside: avoid;
+    }
+
+    .stat-card {
+        border: 1px solid #ccc !important;
+        box-shadow: none !important;
+    }
+
+    .coming-soon-card {
+        display: none !important;
+    }
+
+    body {
+        background: white !important;
+        color: black !important;
+    }
+}
+
+/* Landscape orientation on mobile */
+@media (max-width: 768px) and (orientation: landscape) {
+    .sidebar {
+        width: 12rem;
+    }
+
+    .brand-text {
+        display: none;
+    }
+
+    .section-label {
+        display: none;
+    }
+
+    .nav-item span {
+        display: none;
+    }
+
+    .nav-item {
+        justify-content: center;
+        padding: var(--spacing-sm);
+    }
+
+    .bottom-nav {
+        padding: var(--spacing-xs);
+    }
+
+    .bottom-nav-item {
+        min-height: 3rem;
+    }
+
+    .bottom-nav-item span {
+        display: none;
+    }
+}
+
+/* Accessibility improvements */
+@media (prefers-contrast: high) {
+    :root {
+        --border: #000000;
+        --on-surface-variant: #333333;
+    }
+
+    .card {
+        border-width: 2px;
+    }
+
+    .nav-item:focus,
+    .btn:focus,
+    .form-input:focus {
+        outline: 3px solid var(--primary);
+        outline-offset: 2px;
+    }
+}
+
+/* Focus visible improvements */
+.nav-item:focus-visible,
+.btn:focus-visible,
+.bottom-nav-item:focus-visible,
+.more-menu-item:focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+    border-radius: var(--radius-md);
+}
+
+/* Touch device optimizations */
+@media (hover: none) and (pointer: coarse) {
+    .nav-item,
+    .btn,
+    .bottom-nav-item,
+    .more-menu-item {
+        min-height: 44px; /* Minimum touch target size */
+    }
+
+    .stat-card:hover,
+    .card:hover,
+    .feature-card:hover {
+        transform: none; /* Disable hover transforms on touch devices */
+    }
+}

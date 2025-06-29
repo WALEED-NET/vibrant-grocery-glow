@@ -61,7 +61,7 @@ const Header = ({ activeSection }: HeaderProps) => {
         </div>
 
         <div className="flex items-center gap-2">
-          {/* معلومات الإصدار */}
+          {/* معلومات الإصدار مع إمكانية التثبيت */}
           <AppVersion />
           
           {/* أيقونة الإشعارات */}

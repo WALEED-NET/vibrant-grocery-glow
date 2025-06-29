@@ -1,99 +1,70 @@
-// Minimal JavaScript for Blazor app - Only essential UI interactions
+// Minimal JavaScript - Only for essential browser APIs that Blazor can't handle
 
-document.addEventListener('DOMContentLoaded', function() {
-    // Initialize Lucide icons
+// Initialize Lucide icons
+window.initializeLucideIcons = () => {
     if (typeof lucide !== 'undefined') {
         lucide.createIcons();
     }
+};
 
-    // Initialize sidebar toggle for mobile
-    initializeSidebarToggle();
-    
-    // Initialize bottom navigation
-    initializeBottomNavigation();
-    
-    // Initialize more menu modal
-    initializeMoreMenuModal();
-    
-    // Re-initialize icons when Blazor navigates
-    initializeMutationObserver();
+// Voice recognition for search (JSInterop)
+window.startVoiceRecognition = () => {
+    return new Promise((resolve, reject) => {
+        if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+            reject('Speech recognition not supported');
+            return;
+        }
+
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        const recognition = new SpeechRecognition();
+        
+        recognition.continuous = false;
+        recognition.interimResults = false;
+        recognition.lang = 'ar-SA';
+
+        recognition.onresult = (event) => {
+            const transcript = event.results[0][0].transcript;
+            resolve(transcript);
+        };
+
+        recognition.onerror = (event) => {
+            reject(event.error);
+        };
+
+        recognition.onend = () => {
+            // Recognition ended
+        };
+
+        recognition.start();
+    });
+};
+
+// Initialize on page load
+document.addEventListener('DOMContentLoaded', function() {
+    initializeLucideIcons();
 });
 
-function initializeSidebarToggle() {
-    const sidebarToggle = document.getElementById('sidebarToggle');
-    const sidebar = document.getElementById('sidebar');
+// Re-initialize icons when Blazor updates the DOM
+const observer = new MutationObserver(function(mutations) {
+    let shouldReinitialize = false;
     
-    if (sidebarToggle && sidebar) {
-        sidebarToggle.addEventListener('click', function() {
-            sidebar.classList.toggle('open');
-        });
-        
-        // Close sidebar when clicking outside on mobile
-        document.addEventListener('click', function(e) {
-            if (window.innerWidth <= 768) {
-                if (!sidebar.contains(e.target) && !sidebarToggle.contains(e.target)) {
-                    sidebar.classList.remove('open');
+    mutations.forEach(function(mutation) {
+        if (mutation.type === 'childList' && mutation.addedNodes.length > 0) {
+            for (let node of mutation.addedNodes) {
+                if (node.nodeType === 1 && (node.querySelector('[data-lucide]') || node.hasAttribute('data-lucide'))) {
+                    shouldReinitialize = true;
+                    break;
                 }
             }
-        });
-    }
-}
-
-function initializeBottomNavigation() {
-    const moreMenuBtn = document.getElementById('moreMenuBtn');
-    const moreMenuModal = document.getElementById('moreMenuModal');
-    
-    if (moreMenuBtn && moreMenuModal) {
-        moreMenuBtn.addEventListener('click', function() {
-            moreMenuModal.classList.add('active');
-        });
-    }
-}
-
-function initializeMoreMenuModal() {
-    const moreMenuModal = document.getElementById('moreMenuModal');
-    
-    if (moreMenuModal) {
-        // Close modal when clicking outside
-        moreMenuModal.addEventListener('click', function(e) {
-            if (e.target === moreMenuModal) {
-                moreMenuModal.classList.remove('active');
-            }
-        });
-        
-        // Close modal when clicking on menu items
-        const menuItems = moreMenuModal.querySelectorAll('.more-menu-item');
-        menuItems.forEach(item => {
-            item.addEventListener('click', function() {
-                moreMenuModal.classList.remove('active');
-            });
-        });
-    }
-}
-
-function initializeMutationObserver() {
-    // Re-initialize icons when DOM changes (for Blazor navigation)
-    const observer = new MutationObserver(function(mutations) {
-        mutations.forEach(function(mutation) {
-            if (mutation.type === 'childList' && mutation.addedNodes.length > 0) {
-                // Re-initialize Lucide icons for new content
-                if (typeof lucide !== 'undefined') {
-                    lucide.createIcons();
-                }
-            }
-        });
+        }
     });
     
-    observer.observe(document.body, {
-        childList: true,
-        subtree: true
-    });
-}
-
-// Handle window resize for responsive behavior
-window.addEventListener('resize', function() {
-    const sidebar = document.getElementById('sidebar');
-    if (window.innerWidth > 768 && sidebar) {
-        sidebar.classList.remove('open');
+    if (shouldReinitialize) {
+        setTimeout(initializeLucideIcons, 10);
     }
+});
+
+observer.observe(document.body, {
+    childList: true,
+    subtree: true
 });

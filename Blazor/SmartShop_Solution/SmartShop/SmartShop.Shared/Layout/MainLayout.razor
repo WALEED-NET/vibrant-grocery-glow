@@ -1,8 +1,9 @@
 @inherits LayoutComponentBase
+@inject IJSRuntime JSRuntime
 
 <div class="main-app">
     <!-- Sidebar -->
-    <aside id="sidebar" class="sidebar">
+    <aside class="sidebar @(sidebarOpen ? "open" : "")">
         <div class="sidebar-header">
             <div class="sidebar-brand">
                 <div class="brand-icon">
@@ -19,27 +20,27 @@
             <div class="sidebar-section">
                 <div class="section-label">القوائم الرئيسية</div>
                 <nav class="sidebar-nav">
-                    <NavLink class="nav-item" href="" Match="NavLinkMatch.All">
+                    <NavLink class="nav-item" href="" Match="NavLinkMatch.All" @onclick="CloseSidebar">
                         <i data-lucide="bar-chart-3"></i>
                         <span>لوحة التحكم</span>
                     </NavLink>
-                    <NavLink class="nav-item" href="products">
+                    <NavLink class="nav-item" href="products" @onclick="CloseSidebar">
                         <i data-lucide="package"></i>
                         <span>إدارة المنتجات</span>
                     </NavLink>
-                    <NavLink class="nav-item" href="sales">
+                    <NavLink class="nav-item" href="sales" @onclick="CloseSidebar">
                         <i data-lucide="trending-up"></i>
                         <span>عمليات البيع</span>
                     </NavLink>
-                    <NavLink class="nav-item" href="purchase">
+                    <NavLink class="nav-item" href="purchase" @onclick="CloseSidebar">
                         <i data-lucide="shopping-bag"></i>
                         <span>عمليات الشراء</span>
                     </NavLink>
-                    <NavLink class="nav-item" href="shortage">
+                    <NavLink class="nav-item" href="shortage" @onclick="CloseSidebar">
                         <i data-lucide="shopping-cart"></i>
                         <span>سلة النواقص</span>
                     </NavLink>
-                    <NavLink class="nav-item" href="exchange-rate">
+                    <NavLink class="nav-item" href="exchange-rate" @onclick="CloseSidebar">
                         <i data-lucide="dollar-sign"></i>
                         <span>سعر الصرف</span>
                     </NavLink>
@@ -51,11 +52,11 @@
             <div class="sidebar-section">
                 <div class="section-label">الإدارة والتقارير</div>
                 <nav class="sidebar-nav">
-                    <NavLink class="nav-item" href="units">
+                    <NavLink class="nav-item" href="units" @onclick="CloseSidebar">
                         <i data-lucide="ruler"></i>
                         <span>إدارة الوحدات</span>
                     </NavLink>
-                    <NavLink class="nav-item" href="reports">
+                    <NavLink class="nav-item" href="reports" @onclick="CloseSidebar">
                         <i data-lucide="file-text"></i>
                         <span>التقارير</span>
                     </NavLink>
@@ -67,11 +68,11 @@
             <div class="sidebar-section">
                 <div class="section-label">الإعدادات</div>
                 <nav class="sidebar-nav">
-                    <NavLink class="nav-item" href="settings">
+                    <NavLink class="nav-item" href="settings" @onclick="CloseSidebar">
                         <i data-lucide="settings"></i>
                         <span>إعدادات التطبيق</span>
                     </NavLink>
-                    <NavLink class="nav-item" href="profile">
+                    <NavLink class="nav-item" href="profile" @onclick="CloseSidebar">
                         <i data-lucide="user"></i>
                         <span>بيانات الحساب</span>
                     </NavLink>
@@ -93,19 +94,19 @@
         <header class="header">
             <div class="header-content">
                 <div class="header-left">
-                    <button id="sidebarToggle" class="sidebar-toggle">
+                    <button class="sidebar-toggle" @onclick="ToggleSidebar">
                         <i data-lucide="menu"></i>
                     </button>
                     <div class="page-title">
-                        <h1 id="pageTitle">@GetPageTitle()</h1>
+                        <h1>@GetPageTitle()</h1>
                     </div>
                 </div>
                 <div class="header-right">
-                    <button class="app-version-btn">
+                    <button class="app-version-btn" @onclick="ShowAppInfo">
                         <i data-lucide="info"></i>
                         <span>معلومات التطبيق</span>
                     </button>
-                    <button class="notifications-btn">
+                    <button class="notifications-btn" @onclick="ShowNotifications">
                         <i data-lucide="bell"></i>
                         <span class="notification-badge">3</span>
                     </button>
@@ -137,69 +138,118 @@
             <i data-lucide="shopping-bag"></i>
             <span>الشراء</span>
         </NavLink>
-        <button class="bottom-nav-item more-btn" id="moreMenuBtn">
+        <button class="bottom-nav-item more-btn" @onclick="ToggleMoreMenu">
             <i data-lucide="more-horizontal"></i>
             <span>المزيد</span>
         </button>
     </nav>
 
     <!-- More Menu Modal (Mobile) -->
-    <div id="moreMenuModal" class="more-menu-modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3>المزيد من الخيارات</h3>
-                <p>اختر القسم الذي تريد الوصول إليه</p>
-            </div>
-            <div class="modal-body">
-                <NavLink href="shortage" class="more-menu-item">
-                    <i data-lucide="shopping-cart"></i>
-                    <div class="item-content">
-                        <div class="item-title">سلة النواقص</div>
-                        <div class="item-description">إدارة المنتجات الناقصة</div>
-                    </div>
-                </NavLink>
-                <NavLink href="exchange-rate" class="more-menu-item">
-                    <i data-lucide="dollar-sign"></i>
-                    <div class="item-content">
-                        <div class="item-title">سعر الصرف</div>
-                        <div class="item-description">تحديث أسعار الصرف</div>
-                    </div>
-                </NavLink>
-                <NavLink href="units" class="more-menu-item">
-                    <i data-lucide="ruler"></i>
-                    <div class="item-content">
-                        <div class="item-title">إدارة الوحدات</div>
-                        <div class="item-description">إضافة وتعديل وحدات القياس</div>
-                    </div>
-                </NavLink>
-                <NavLink href="reports" class="more-menu-item">
-                    <i data-lucide="file-text"></i>
-                    <div class="item-content">
-                        <div class="item-title">التقارير</div>
-                        <div class="item-description">تقارير المبيعات والمخزون</div>
-                    </div>
-                </NavLink>
-                <NavLink href="settings" class="more-menu-item">
-                    <i data-lucide="settings"></i>
-                    <div class="item-content">
-                        <div class="item-title">الإعدادات</div>
-                        <div class="item-description">إعدادات التطبيق العامة</div>
-                    </div>
-                </NavLink>
-                <NavLink href="profile" class="more-menu-item">
-                    <i data-lucide="user"></i>
-                    <div class="item-content">
-                        <div class="item-title">بيانات الحساب</div>
-                        <div class="item-description">إدارة بيانات المستخدم</div>
-                    </div>
-                </NavLink>
+    @if (moreMenuOpen)
+    {
+        <div class="more-menu-modal active" @onclick="CloseMoreMenuOnBackdrop">
+            <div class="modal-content" @onclick:stopPropagation="true">
+                <div class="modal-header">
+                    <h3>المزيد من الخيارات</h3>
+                    <p>اختر القسم الذي تريد الوصول إليه</p>
+                </div>
+                <div class="modal-body">
+                    <NavLink href="shortage" class="more-menu-item" @onclick="CloseMoreMenu">
+                        <i data-lucide="shopping-cart"></i>
+                        <div class="item-content">
+                            <div class="item-title">سلة النواقص</div>
+                            <div class="item-description">إدارة المنتجات الناقصة</div>
+                        </div>
+                    </NavLink>
+                    <NavLink href="exchange-rate" class="more-menu-item" @onclick="CloseMoreMenu">
+                        <i data-lucide="dollar-sign"></i>
+                        <div class="item-content">
+                            <div class="item-title">سعر الصرف</div>
+                            <div class="item-description">تحديث أسعار الصرف</div>
+                        </div>
+                    </NavLink>
+                    <NavLink href="units" class="more-menu-item" @onclick="CloseMoreMenu">
+                        <i data-lucide="ruler"></i>
+                        <div class="item-content">
+                            <div class="item-title">إدارة الوحدات</div>
+                            <div class="item-description">إضافة وتعديل وحدات القياس</div>
+                        </div>
+                    </NavLink>
+                    <NavLink href="reports" class="more-menu-item" @onclick="CloseMoreMenu">
+                        <i data-lucide="file-text"></i>
+                        <div class="item-content">
+                            <div class="item-title">التقارير</div>
+                            <div class="item-description">تقارير المبيعات والمخزون</div>
+                        </div>
+                    </NavLink>
+                    <NavLink href="settings" class="more-menu-item" @onclick="CloseMoreMenu">
+                        <i data-lucide="settings"></i>
+                        <div class="item-content">
+                            <div class="item-title">الإعدادات</div>
+                            <div class="item-description">إعدادات التطبيق العامة</div>
+                        </div>
+                    </NavLink>
+                    <NavLink href="profile" class="more-menu-item" @onclick="CloseMoreMenu">
+                        <i data-lucide="user"></i>
+                        <div class="item-content">
+                            <div class="item-title">بيانات الحساب</div>
+                            <div class="item-description">إدارة بيانات المستخدم</div>
+                        </div>
+                    </NavLink>
+                </div>
             </div>
         </div>
-    </div>
+    }
 </div>
 
 @code {
     [Inject] private NavigationManager Navigation { get; set; } = default!;
+    
+    private bool sidebarOpen = false;
+    private bool moreMenuOpen = false;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await JSRuntime.InvokeVoidAsync("initializeLucideIcons");
+        }
+    }
+
+    private void ToggleSidebar()
+    {
+        sidebarOpen = !sidebarOpen;
+    }
+
+    private void CloseSidebar()
+    {
+        sidebarOpen = false;
+    }
+
+    private void ToggleMoreMenu()
+    {
+        moreMenuOpen = !moreMenuOpen;
+    }
+
+    private void CloseMoreMenu()
+    {
+        moreMenuOpen = false;
+    }
+
+    private void CloseMoreMenuOnBackdrop()
+    {
+        moreMenuOpen = false;
+    }
+
+    private void ShowAppInfo()
+    {
+        // Handle app info display
+    }
+
+    private void ShowNotifications()
+    {
+        // Handle notifications display
+    }
 
     private string GetPageTitle()
     {

@@ -1,5 +1,6 @@
 @page "/products"
 @using SmartShop.Shared.Models
+@inject IJSRuntime JSRuntime
 
 <PageTitle>إدارة المنتجات - البقالة الذكية</PageTitle>
 
@@ -236,7 +237,7 @@
 <!-- Product Modal -->
 @if (showProductModal)
 {
-    <div class="modal-overlay active" @onclick="CloseModalOnBackdrop" @onclick:stopPropagation="true">
+    <div class="modal-overlay active" @onclick="CloseModalOnBackdrop">
         <div class="modal-container" @onclick:stopPropagation="true">
             <div class="modal-header">
                 <h2>@(editingProduct != null ? "تعديل منتج" : "إضافة منتج جديد")</h2>
@@ -381,6 +382,14 @@
         filteredProducts = products;
     }
 
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await JSRuntime.InvokeVoidAsync("initializeLucideIcons");
+        }
+    }
+
     protected override void OnParametersSet()
     {
         FilterProducts();
@@ -454,10 +463,29 @@
         StateHasChanged();
     }
 
-    private void ToggleVoiceSearch()
+    private async Task ToggleVoiceSearch()
     {
         isRecording = !isRecording;
-        // Voice search would be implemented with JS interop if needed
+        if (isRecording)
+        {
+            try
+            {
+                var result = await JSRuntime.InvokeAsync<string>("startVoiceRecognition");
+                if (!string.IsNullOrEmpty(result))
+                {
+                    searchQuery = result;
+                    FilterProducts();
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Voice recognition error: {ex.Message}");
+            }
+            finally
+            {
+                isRecording = false;
+            }
+        }
         StateHasChanged();
     }
 
@@ -497,9 +525,8 @@
         StateHasChanged();
     }
 
-    private void CloseModalOnBackdrop(MouseEventArgs e)
+    private void CloseModalOnBackdrop()
     {
-        // Only close if clicking on the backdrop (modal-overlay)
         CloseProductModal();
     }
 

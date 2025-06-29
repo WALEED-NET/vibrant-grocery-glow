@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>عمليات البيع - البقالة الذكية</title>
+    <meta name="description" content="إدارة عمليات البيع والفواتير في نظام البقالة الذكية">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lucide/0.263.1/lucide.min.css">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/components.css">
+    <link rel="stylesheet" href="styles/sales.css">
+    <link rel="stylesheet" href="styles/responsive.css">
+</head>
+<body>
+    <!-- Main App -->
+    <div id="mainApp" class="main-app">
+        <!-- Sidebar -->
+        <aside id="sidebar" class="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-brand">
+                    <div class="brand-icon">
+                        <i data-lucide="shopping-cart"></i>
+                    </div>
+                    <div class="brand-text">
+                        <h1>نظام إدارة البقالة الذكية</h1>
+                        <p>إدارة شاملة للمخزون والمبيعات</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sidebar-content">
+                <div class="sidebar-section">
+                    <div class="section-label">القوائم الرئيسية</div>
+                    <nav class="sidebar-nav">
+                        <a href="#" class="nav-item active" data-section="dashboard">
+                            <i data-lucide="bar-chart-3"></i>
+                            <span>لوحة التحكم</span>
+                        </a>
+                        <a href="#" class="nav-item" data-section="products">
+                            <i data-lucide="package"></i>
+                            <span>إدارة المنتجات</span>
+                        </a>
+                        <a href="#" class="nav-item" data-section="sales">
+                            <i data-lucide="trending-up"></i>
+                            <span>عمليات البيع</span>
+                        </a>
+                        <a href="#" class="nav-item" data-section="purchase">
+                            <i data-lucide="shopping-bag"></i>
+                            <span>عمليات الشراء</span>
+                        </a>
+                        <a href="#" class="nav-item" data-section="shortage">
+                            <i data-lucide="shopping-cart"></i>
+                            <span>سلة النواقص</span>
+                        </a>
+                        <a href="#" class="nav-item" data-section="exchange-rate">
+                            <i data-lucide="dollar-sign"></i>
+                            <span>سعر الصرف</span>
+                        </a>
+                    </nav>
+                </div>
+
+                <div class="sidebar-separator"></div>
+
+                <div class="sidebar-section">
+                    <div class="section-label">الإدارة والتقارير</div>
+                    <nav class="sidebar-nav">
+                        <a href="#" class="nav-item" data-section="units">
+                            <i data-lucide="ruler"></i>
+                            <span>إدارة الوحدات</span>
+                        </a>
+                        <a href="#" class="nav-item" data-section="reports">
+                            <i data-lucide="file-text"></i>
+                            <span>التقارير</span>
+                        </a>
+                    </nav>
+                </div>
+
+                <div class="sidebar-separator"></div>
+
+                <div class="sidebar-section">
+                    <div class="section-label">الإعدادات</div>
+                    <nav class="sidebar-nav">
+                        <a href="#" class="nav-item" data-section="settings">
+                            <i data-lucide="settings"></i>
+                            <span>إعدادات التطبيق</span>
+                        </a>
+                        <a href="#" class="nav-item" data-section="profile">
+                            <i data-lucide="user"></i>
+                            <span>بيانات الحساب</span>
+                        </a>
+                    </nav>
+                </div>
+            </div>
+
+            <div class="sidebar-footer">
+                <a href="#" class="nav-item logout">
+                    <i data-lucide="log-out"></i>
+                    <span>تسجيل الخروج</span>
+                </a>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Header -->
+            <header class="header">
+                <div class="header-content">
+                    <div class="header-left">
+                        <button id="sidebarToggle" class="sidebar-toggle">
+                            <i data-lucide="menu"></i>
+                        </button>
+                        <div class="page-title">
+                            <h1 id="pageTitle">عمليات البيع</h1>
+                        </div>
+                    </div>
+                    <div class="header-right">
+                        <button class="btn btn-primary" id="newInvoiceBtn">
+                            <i data-lucide="plus"></i>
+                            <span>فاتورة جديدة</span>
+                        </button>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Page Content -->
+            <main class="page-content">
+                <!-- Sales Dashboard Stats -->
+                <div class="sales-stats">
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i data-lucide="trending-up"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-label">مبيعات اليوم</div>
+                            <div class="stat-value" id="todaySales">0 ر.ي</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i data-lucide="receipt"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-label">عدد الفواتير</div>
+                            <div class="stat-value" id="invoiceCount">0</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i data-lucide="dollar-sign"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-label">متوسط الفاتورة</div>
+                            <div class="stat-value" id="averageInvoice">0 ر.ي</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Invoice Creation -->
+                <div class="invoice-section">
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="card-title">
+                                <i data-lucide="shopping-cart"></i>
+                                <span>إنشاء فاتورة جديدة</span>
+                            </h2>
+                        </div>
+                        <div class="card-content">
+                            <div class="invoice-form">
+                                <div class="customer-section">
+                                    <div class="form-group">
+                                        <label class="form-label">اسم العميل (اختياري)</label>
+                                        <input type="text" id="customerName" class="form-input" placeholder="اسم العميل">
+                                    </div>
+                                </div>
+
+                                <div class="product-search-section">
+                                    <div class="form-group">
+                                        <label class="form-label">البحث عن منتج</label>
+                                        <div class="search-container">
+                                            <input type="text" id="productSearch" class="form-input" placeholder="ابحث عن منتج...">
+                                            <div class="search-results" id="searchResults"></div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="invoice-items" id="invoiceItems">
+                                    <div class="items-header">
+                                        <div class="header-item">المنتج</div>
+                                        <div class="header-item">السعر</div>
+                                        <div class="header-item">الكمية</div>
+                                        <div class="header-item">المجموع</div>
+                                        <div class="header-item">إجراءات</div>
+                                    </div>
+                                    <div class="items-list" id="itemsList">
+                                        <!-- Invoice items will be added here -->
+                                    </div>
+                                    <div class="empty-invoice" id="emptyInvoice">
+                                        <i data-lucide="shopping-cart"></i>
+                                        <p>ابدأ بإضافة منتجات للفاتورة</p>
+                                    </div>
+                                </div>
+
+                                <div class="invoice-summary" id="invoiceSummary" style="display: none;">
+                                    <div class="summary-row">
+                                        <span>المجموع الفرعي:</span>
+                                        <span id="subtotal">0 ر.ي</span>
+                                    </div>
+                                    <div class="summary-row total">
+                                        <span>الإجمالي:</span>
+                                        <span id="total">0 ر.ي</span>
+                                    </div>
+                                </div>
+
+                                <div class="invoice-actions" id="invoiceActions" style="display: none;">
+                                    <button class="btn btn-secondary" onclick="clearInvoice()">مسح الفاتورة</button>
+                                    <button class="btn btn-primary" onclick="completeInvoice()">إتمام البيع</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Sales -->
+                <div class="recent-sales-section">
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="card-title">
+                                <i data-lucide="history"></i>
+                                <span>المبيعات الأخيرة</span>
+                            </h2>
+                        </div>
+                        <div class="card-content">
+                            <div class="sales-list" id="salesList">
+                                <!-- Recent sales will be populated here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/sales.js"></script>
+</body>
+</html>

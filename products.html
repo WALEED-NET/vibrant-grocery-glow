@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إدارة المنتجات - البقالة الذكية</title>
+    <meta name="description" content="إدارة المنتجات والمخزون في نظام البقالة الذكية">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lucide/0.263.1/lucide.min.css">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/components.css">
+    <link rel="stylesheet" href="styles/products.css">
+    <link rel="stylesheet" href="styles/responsive.css">
+</head>
+<body>
+    <!-- Main App -->
+    <div id="mainApp" class="main-app">
+        <!-- Sidebar -->
+        <aside id="sidebar" class="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-brand">
+                    <div class="brand-icon">
+                        <i data-lucide="shopping-cart"></i>
+                    </div>
+                    <div class="brand-text">
+                        <h1>نظام إدارة البقالة الذكية</h1>
+                        <p>إدارة شاملة للمخزون والمبيعات</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sidebar-content">
+                <div class="sidebar-section">
+                    <div class="section-label">القوائم الرئيسية</div>
+                    <nav class="sidebar-nav">
+                        <a href="#" class="nav-item active" data-section="dashboard">
+                            <i data-lucide="bar-chart-3"></i>
+                            <span>لوحة التحكم</span>
+                        </a>
+                        <a href="#" class="nav-item" data-section="products">
+                            <i data-lucide="package"></i>
+                            <span>إدارة المنتجات</span>
+                        </a>
+                        <a href="#" class="nav-item" data-section="sales">
+                            <i data-lucide="trending-up"></i>
+                            <span>عمليات البيع</span>
+                        </a>
+                        <a href="#" class="nav-item" data-section="purchase">
+                            <i data-lucide="shopping-bag"></i>
+                            <span>عمليات الشراء</span>
+                        </a>
+                        <a href="#" class="nav-item" data-section="shortage">
+                            <i data-lucide="shopping-cart"></i>
+                            <span>سلة النواقص</span>
+                        </a>
+                        <a href="#" class="nav-item" data-section="exchange-rate">
+                            <i data-lucide="dollar-sign"></i>
+                            <span>سعر الصرف</span>
+                        </a>
+                    </nav>
+                </div>
+
+                <div class="sidebar-separator"></div>
+
+                <div class="sidebar-section">
+                    <div class="section-label">الإدارة والتقارير</div>
+                    <nav class="sidebar-nav">
+                        <a href="#" class="nav-item" data-section="units">
+                            <i data-lucide="ruler"></i>
+                            <span>إدارة الوحدات</span>
+                        </a>
+                        <a href="#" class="nav-item" data-section="reports">
+                            <i data-lucide="file-text"></i>
+                            <span>التقارير</span>
+                        </a>
+                    </nav>
+                </div>
+
+                <div class="sidebar-separator"></div>
+
+                <div class="sidebar-section">
+                    <div class="section-label">الإعدادات</div>
+                    <nav class="sidebar-nav">
+                        <a href="#" class="nav-item" data-section="settings">
+                            <i data-lucide="settings"></i>
+                            <span>إعدادات التطبيق</span>
+                        </a>
+                        <a href="#" class="nav-item" data-section="profile">
+                            <i data-lucide="user"></i>
+                            <span>بيانات الحساب</span>
+                        </a>
+                    </nav>
+                </div>
+            </div>
+
+            <div class="sidebar-footer">
+                <a href="#" class="nav-item logout">
+                    <i data-lucide="log-out"></i>
+                    <span>تسجيل الخروج</span>
+                </a>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Header -->
+            <header class="header">
+                <div class="header-content">
+                    <div class="header-left">
+                        <button id="sidebarToggle" class="sidebar-toggle">
+                            <i data-lucide="menu"></i>
+                        </button>
+                        <div class="page-title">
+                            <h1 id="pageTitle">إدارة المنتجات</h1>
+                        </div>
+                    </div>
+                    <div class="header-right">
+                        <button class="btn btn-primary" id="addProductBtn">
+                            <i data-lucide="plus"></i>
+                            <span>إضافة منتج جديد</span>
+                        </button>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Page Content -->
+            <main class="page-content">
+                <!-- Products Management Content -->
+                <div id="productsContent" class="content-section active">
+                    <!-- Search and Filters -->
+                    <div class="products-toolbar">
+                        <div class="search-container">
+                            <input type="text" id="productSearch" class="form-input" placeholder="البحث في المنتجات...">
+                            <i data-lucide="search" class="search-icon"></i>
+                        </div>
+                        <div class="filter-container">
+                            <select id="categoryFilter" class="form-input">
+                                <option value="">جميع الفئات</option>
+                                <option value="grocery">بقالة</option>
+                                <option value="dairy">منتجات الألبان</option>
+                                <option value="meat">اللحوم</option>
+                                <option value="vegetables">خضروات</option>
+                            </select>
+                            <select id="stockFilter" class="form-input">
+                                <option value="">جميع المنتجات</option>
+                                <option value="in-stock">متوفر</option>
+                                <option value="low-stock">قليل المخزون</option>
+                                <option value="out-of-stock">نفد المخزون</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Products Grid -->
+                    <div class="products-grid" id="productsGrid">
+                        <!-- Products will be populated by JavaScript -->
+                    </div>
+
+                    <!-- Empty State -->
+                    <div class="empty-state" id="emptyState" style="display: none;">
+                        <i data-lucide="package"></i>
+                        <h3>لا توجد منتجات</h3>
+                        <p>ابدأ بإضافة منتجات جديدة لمتجرك</p>
+                        <button class="btn btn-primary" onclick="openAddProductModal()">
+                            <i data-lucide="plus"></i>
+                            إضافة منتج جديد
+                        </button>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Add/Edit Product Modal -->
+    <div id="productModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle">إضافة منتج جديد</h3>
+                <button class="modal-close" onclick="closeProductModal()">
+                    <i data-lucide="x"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="productForm">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label class="form-label">اسم المنتج</label>
+                            <input type="text" id="productName" class="form-input" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">الفئة</label>
+                            <select id="productCategory" class="form-input" required>
+                                <option value="">اختر الفئة</option>
+                                <option value="grocery">بقالة</option>
+                                <option value="dairy">منتجات الألبان</option>
+                                <option value="meat">اللحوم</option>
+                                <option value="vegetables">خضروات</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">سعر الشراء (ر.س)</label>
+                            <input type="number" id="purchasePrice" class="form-input" step="0.01" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">سعر البيع (ر.ي)</label>
+                            <input type="number" id="sellingPrice" class="form-input" step="1" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">الكمية الحالية</label>
+                            <input type="number" id="currentQuantity" class="form-input" step="0.1" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">الحد الأدنى</label>
+                            <input type="number" id="minimumQuantity" class="form-input" step="0.1" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">الوحدة</label>
+                            <select id="productUnit" class="form-input" required>
+                                <option value="">اختر الوحدة</option>
+                                <option value="كيلو">كيلو</option>
+                                <option value="جرام">جرام</option>
+                                <option value="قطعة">قطعة</option>
+                                <option value="علبة">علبة</option>
+                                <option value="كيس">كيس</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="modal-actions">
+                        <button type="button" class="btn btn-secondary" onclick="closeProductModal()">إلغاء</button>
+                        <button type="submit" class="btn btn-primary">حفظ المنتج</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/products.js"></script>
+</body>
+</html>

@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>سلة النواقص - البقالة الذكية</title>
+    <meta name="description" content="إدارة المنتجات الناقصة والمخزون المنخفض">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lucide/0.263.1/lucide.min.css">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/components.css">
+    <link rel="stylesheet" href="styles/shortage.css">
+    <link rel="stylesheet" href="styles/responsive.css">
+</head>
+<body>
+    <!-- Main App -->
+    <div id="mainApp" class="main-app">
+        <!-- Sidebar -->
+        <aside id="sidebar" class="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-brand">
+                    <div class="brand-icon">
+                        <i data-lucide="shopping-cart"></i>
+                    </div>
+                    <div class="brand-text">
+                        <h1>نظام إدارة البقالة الذكية</h1>
+                        <p>إدارة شاملة للمخزون والمبيعات</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sidebar-content">
+                <div class="sidebar-section">
+                    <div class="section-label">القوائم الرئيسية</div>
+                    <nav class="sidebar-nav">
+                        <a href="#" class="nav-item" data-section="dashboard">
+                            <i data-lucide="bar-chart-3"></i>
+                            <span>لوحة التحكم</span>
+                        </a>
+                        <a href="#" class="nav-item" data-section="products">
+                            <i data-lucide="package"></i>
+                            <span>إدارة المنتجات</span>
+                        </a>
+                        <a href="#" class="nav-item" data-section="sales">
+                            <i data-lucide="trending-up"></i>
+                            <span>عمليات البيع</span>
+                        </a>
+                        <a href="#" class="nav-item" data-section="purchase">
+                            <i data-lucide="shopping-bag"></i>
+                            <span>عمليات الشراء</span>
+                        </a>
+                        <a href="#" class="nav-item active" data-section="shortage">
+                            <i data-lucide="shopping-cart"></i>
+                            <span>سلة النواقص</span>
+                        </a>
+                        <a href="#" class="nav-item" data-section="exchange-rate">
+                            <i data-lucide="dollar-sign"></i>
+                            <span>سعر الصرف</span>
+                        </a>
+                    </nav>
+                </div>
+
+                <div class="sidebar-separator"></div>
+
+                <div class="sidebar-section">
+                    <div class="section-label">الإدارة والتقارير</div>
+                    <nav class="sidebar-nav">
+                        <a href="#" class="nav-item" data-section="units">
+                            <i data-lucide="ruler"></i>
+                            <span>إدارة الوحدات</span>
+                        </a>
+                        <a href="#" class="nav-item" data-section="reports">
+                            <i data-lucide="file-text"></i>
+                            <span>التقارير</span>
+                        </a>
+                    </nav>
+                </div>
+
+                <div class="sidebar-separator"></div>
+
+                <div class="sidebar-section">
+                    <div class="section-label">الإعدادات</div>
+                    <nav class="sidebar-nav">
+                        <a href="#" class="nav-item" data-section="settings">
+                            <i data-lucide="settings"></i>
+                            <span>إعدادات التطبيق</span>
+                        </a>
+                        <a href="#" class="nav-item" data-section="profile">
+                            <i data-lucide="user"></i>
+                            <span>بيانات الحساب</span>
+                        </a>
+                    </nav>
+                </div>
+            </div>
+
+            <div class="sidebar-footer">
+                <a href="#" class="nav-item logout">
+                    <i data-lucide="log-out"></i>
+                    <span>تسجيل الخروج</span>
+                </a>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Header -->
+            <header class="header">
+                <div class="header-content">
+                    <div class="header-left">
+                        <button id="sidebarToggle" class="sidebar-toggle">
+                            <i data-lucide="menu"></i>
+                        </button>
+                        <div class="page-title">
+                            <h1 id="pageTitle">سلة النواقص</h1>
+                        </div>
+                    </div>
+                    <div class="header-right">
+                        <button class="btn btn-primary" id="generateShoppingListBtn">
+                            <i data-lucide="shopping-bag"></i>
+                            <span>قائمة التسوق</span>
+                        </button>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Page Content -->
+            <main class="page-content">
+                <!-- Shortage Stats -->
+                <div class="shortage-stats">
+                    <div class="stat-card critical">
+                        <div class="stat-icon">
+                            <i data-lucide="alert-triangle"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-label">نفد المخزون</div>
+                            <div class="stat-value" id="outOfStockCount">0</div>
+                        </div>
+                    </div>
+                    <div class="stat-card warning">
+                        <div class="stat-icon">
+                            <i data-lucide="alert-circle"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-label">مخزون منخفض</div>
+                            <div class="stat-value" id="lowStockCount">0</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i data-lucide="shopping-cart"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-label">إجمالي النواقص</div>
+                            <div class="stat-value" id="totalShortageCount">0</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Shortage Items -->
+                <div class="shortage-section">
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="card-title">
+                                <i data-lucide="package"></i>
+                                <span>المنتجات الناقصة</span>
+                            </h2>
+                            <div class="header-actions">
+                                <select id="sortFilter" class="form-input">
+                                    <option value="urgency">حسب الأولوية</option>
+                                    <option value="name">حسب الاسم</option>
+                                    <option value="category">حسب الفئة</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="card-content">
+                            <div class="shortage-list" id="shortageList">
+                                <!-- Shortage items will be populated here -->
+                            </div>
+                            
+                            <div class="empty-shortage" id="emptyShortage" style="display: none;">
+                                <i data-lucide="check-circle"></i>
+                                <h3>ممتاز! لا توجد نواقص</h3>
+                                <p>جميع المنتجات متوفرة في المخزون</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Shopping List -->
+                <div class="shopping-list-section" id="shoppingListSection" style="display: none;">
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="card-title">
+                                <i data-lucide="shopping-bag"></i>
+                                <span>قائمة التسوق المقترحة</span>
+                            </h2>
+                            <div class="header-actions">
+                                <button class="btn btn-secondary" onclick="printShoppingList()">
+                                    <i data-lucide="printer"></i>
+                                    طباعة
+                                </button>
+                                <button class="btn btn-primary" onclick="shareShoppingList()">
+                                    <i data-lucide="share"></i>
+                                    مشاركة
+                                </button>
+                            </div>
+                        </div>
+                        <div class="card-content">
+                            <div class="shopping-summary">
+                                <div class="summary-item">
+                                    <span>عدد المنتجات:</span>
+                                    <span id="shoppingItemsCount">0</span>
+                                </div>
+                                <div class="summary-item">
+                                    <span>التكلفة المقدرة:</span>
+                                    <span id="estimatedCost">0 ر.س</span>
+                                </div>
+                            </div>
+                            
+                            <div class="shopping-items" id="shoppingItems">
+                                <!-- Shopping list items will be populated here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/shortage.js"></script>
+</body>
+</html>

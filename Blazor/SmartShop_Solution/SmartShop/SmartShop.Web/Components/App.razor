@@ -1,5 +1,5 @@
-﻿<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
 
 <head>
     <meta charset="utf-8" />
@@ -7,13 +7,31 @@
     <base href="/" />
     <link rel="stylesheet" href="_content/SmartShop.Shared/bootstrap/bootstrap.min.css" />
     <link rel="stylesheet" href="_content/SmartShop.Shared/app.css" />
+    <link rel="stylesheet" href="_content/SmartShop.Shared/css/main.css" />
+    <link rel="stylesheet" href="_content/SmartShop.Shared/css/components.css" />
+    <link rel="stylesheet" href="_content/SmartShop.Shared/css/dashboard.css" />
+    <link rel="stylesheet" href="_content/SmartShop.Shared/css/products.css" />
     <link rel="stylesheet" href="SmartShop.Web.styles.css" />
     <link rel="icon" type="image/png" href="_content/SmartShop.Shared/favicon.png" />
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lucide/0.263.1/lucide.min.css">
+    
     <HeadOutlet @rendermode="InteractiveAuto" />
 </head>
 
 <body>
     <Routes @rendermode="InteractiveAuto" />
+    
+    <!-- Scripts -->
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <script src="_content/SmartShop.Shared/js/main.js"></script>
+    <script src="_content/SmartShop.Shared/js/products.js"></script>
     <script src="_framework/blazor.web.js"></script>
 </body>
 

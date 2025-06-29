@@ -1,0 +1,543 @@
+@page "/products"
+@using SmartShop.Shared.Models
+
+<PageTitle>إدارة المنتجات - البقالة الذكية</PageTitle>
+
+<div class="page-content">
+    <!-- Products Page Content -->
+    <div class="products-page">
+        <!-- Action Bar -->
+        <div class="action-bar">
+            <div class="page-header">
+                <h1 class="page-title-main">إدارة المنتجات</h1>
+                <p class="page-subtitle">إدارة شاملة لجميع منتجات متجرك</p>
+            </div>
+            
+            <div class="action-buttons">
+                <button class="btn btn-success" @onclick="HandleSalesRedirect">
+                    <i data-lucide="trending-up"></i>
+                    <span>عملية بيع</span>
+                </button>
+                
+                <button class="btn btn-info" @onclick="HandlePurchaseRedirect">
+                    <i data-lucide="shopping-bag"></i>
+                    <span>عملية شراء</span>
+                </button>
+
+                <button class="btn btn-primary" @onclick="OpenProductModal">
+                    <i data-lucide="plus"></i>
+                    <span>إضافة منتج جديد</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Products List Card -->
+        <div class="products-card">
+            <div class="card-header">
+                <div class="header-left">
+                    <h2 class="card-title">
+                        <i data-lucide="package"></i>
+                        <span>قائمة المنتجات (@products.Count)</span>
+                    </h2>
+                </div>
+                
+                <div class="header-right">
+                    <div class="view-toggle">
+                        <button class="toggle-btn @(isGridView ? "active" : "")" @onclick="() => SetViewMode(true)">
+                            <i data-lucide="grid"></i>
+                            <span>شبكة</span>
+                        </button>
+                        <button class="toggle-btn @(!isGridView ? "active" : "")" @onclick="() => SetViewMode(false)">
+                            <i data-lucide="list"></i>
+                            <span>قائمة</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="search-section">
+                <div class="search-container">
+                    <input type="text" @bind="searchQuery" @oninput="OnSearchInput" class="search-input" placeholder="البحث بالاسم، الفئة أو رقم الإختصار...">
+                    <i data-lucide="search" class="search-icon"></i>
+                </div>
+                <button class="voice-search-btn @(isRecording ? "recording" : "")" @onclick="ToggleVoiceSearch">
+                    <i data-lucide="mic"></i>
+                    <span>بحث صوتي</span>
+                </button>
+            </div>
+
+            <div class="products-content">
+                @if (isGridView)
+                {
+                    <!-- Grid View -->
+                    <div class="products-grid active">
+                        @foreach (var product in filteredProducts)
+                        {
+                            <div class="product-card @(product.IsLowStock ? "low-stock" : "") @(product.IsExpiringSoon ? "expiring-soon" : "")">
+                                <!-- Product Card Header -->
+                                <div class="product-header">
+                                    <div class="product-title-row">
+                                        <div class="product-name">@product.Name</div>
+                                        <div class="product-menu">
+                                            <button class="menu-btn" @onclick="() => ShowProductMenu(product.Id)">
+                                                <i data-lucide="more-vertical"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="product-badges">
+                                        @if (!string.IsNullOrEmpty(product.Category))
+                                        {
+                                            <span class="badge badge-category">@product.Category</span>
+                                        }
+                                        @if (product.IsLowStock)
+                                        {
+                                            <span class="badge badge-low-stock">
+                                                <i data-lucide="alert-triangle"></i>
+                                                ناقص
+                                            </span>
+                                        }
+                                        @if (product.IsExpiringSoon)
+                                        {
+                                            <span class="badge badge-expiring">
+                                                <i data-lucide="clock"></i>
+                                                ينتهي قريباً
+                                            </span>
+                                        }
+                                        @if (product.ShortcutNumber.HasValue)
+                                        {
+                                            <span class="badge badge-shortcut">@product.ShortcutNumber</span>
+                                        }
+                                    </div>
+                                </div>
+
+                                <!-- Product Info Grid -->
+                                <div class="product-info">
+                                    <div class="info-grid">
+                                        <!-- Quantity Section -->
+                                        <div class="info-item quantity">
+                                            <div class="info-label">
+                                                <i data-lucide="package"></i>
+                                                الكمية
+                                            </div>
+                                            <div class="info-value @(product.IsLowStock ? "low-stock" : "")">@product.CurrentQuantity</div>
+                                            <div class="info-unit">@product.Unit</div>
+                                        </div>
+
+                                        <!-- Purchase Price -->
+                                        <div class="info-item purchase-price">
+                                            <div class="info-label">
+                                                <i data-lucide="shopping-cart"></i>
+                                                سعر الشراء
+                                            </div>
+                                            <div class="price-breakdown">
+                                                <div class="price-primary">@product.PurchasePrice.ToString("F2") ر.س</div>
+                                                <div class="price-secondary">@((product.PurchasePrice * 680).ToString("F0")) ر.ي</div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Selling Price -->
+                                        <div class="info-item selling-price">
+                                            <div class="info-label">
+                                                <i data-lucide="tag"></i>
+                                                سعر البيع
+                                            </div>
+                                            <div class="price-breakdown">
+                                                <div class="price-primary">@product.SellingPrice.ToString("F2") ر.س</div>
+                                                <div class="price-secondary">@((product.SellingPrice * 680).ToString("F0")) ر.ي</div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Profit Margin -->
+                                        <div class="info-item profit">
+                                            <div class="info-label">
+                                                <i data-lucide="trending-up"></i>
+                                                هامش الربح
+                                            </div>
+                                            <div class="info-value @(product.ProfitMargin > 0 ? "profit-positive" : "profit-negative")">
+                                                @product.ProfitMargin.ToString("F0") ر.ي
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                @if (!string.IsNullOrEmpty(product.Description))
+                                {
+                                    <div class="product-description">
+                                        @product.Description
+                                    </div>
+                                }
+                            </div>
+                        }
+                    </div>
+                }
+                else
+                {
+                    <!-- List View -->
+                    <div class="products-list active">
+                        @foreach (var product in filteredProducts)
+                        {
+                            <div class="product-row">
+                                <div class="row-name">
+                                    <div class="product-name">@product.Name</div>
+                                    <div class="product-badges">
+                                        @if (!string.IsNullOrEmpty(product.Category))
+                                        {
+                                            <span class="badge badge-category">@product.Category</span>
+                                        }
+                                        @if (product.IsLowStock)
+                                        {
+                                            <span class="badge badge-low-stock">ناقص</span>
+                                        }
+                                    </div>
+                                </div>
+                                
+                                <div class="row-quantity">
+                                    <div class="info-value @(product.IsLowStock ? "low-stock" : "")">@product.CurrentQuantity</div>
+                                    <div class="info-unit">@product.Unit</div>
+                                </div>
+                                
+                                <div class="row-prices">
+                                    <div>شراء: @product.PurchasePrice.ToString("F2") ر.س</div>
+                                    <div>بيع: @product.SellingPrice.ToString("F2") ر.س</div>
+                                </div>
+                                
+                                <div class="row-prices">
+                                    <div>ربح: @product.ProfitMargin.ToString("F0") ر.ي</div>
+                                </div>
+                                
+                                <div class="row-actions">
+                                    <button class="action-btn" @onclick="() => EditProduct(product)">
+                                        <i data-lucide="edit"></i>
+                                    </button>
+                                    <button class="action-btn delete" @onclick="() => DeleteProduct(product.Id)">
+                                        <i data-lucide="trash"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                }
+
+                @if (!filteredProducts.Any())
+                {
+                    <!-- Empty State -->
+                    <div class="empty-state">
+                        <i data-lucide="package"></i>
+                        <h3>لا توجد منتجات</h3>
+                        <p>لم يتم العثور على منتجات تطابق البحث</p>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Product Modal -->
+@if (showProductModal)
+{
+    <div class="modal-overlay active">
+        <div class="modal-container">
+            <div class="modal-header">
+                <h2>@(editingProduct != null ? "تعديل منتج" : "إضافة منتج جديد")</h2>
+                <button class="modal-close" @onclick="CloseProductModal">
+                    <i data-lucide="x"></i>
+                </button>
+            </div>
+            <div class="modal-content">
+                <EditForm Model="productForm" OnValidSubmit="SaveProduct" class="product-form">
+                    <!-- Basic Information -->
+                    <div class="form-section">
+                        <h3 class="section-title">
+                            <i data-lucide="package"></i>
+                            <span>معلومات أساسية</span>
+                        </h3>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="productName">اسم المنتج *</label>
+                                <InputText @bind-Value="productForm.Name" id="productName" required />
+                            </div>
+                            <div class="form-group">
+                                <label for="productCategory">الفئة</label>
+                                <InputText @bind-Value="productForm.Category" id="productCategory" placeholder="مثال: مواد غذائية" />
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="productUnit">الوحدة *</label>
+                                <InputSelect @bind-Value="productForm.Unit" id="productUnit" required>
+                                    <option value="">اختر الوحدة</option>
+                                    <option value="كيلو">كيلو</option>
+                                    <option value="جرام">جرام</option>
+                                    <option value="لتر">لتر</option>
+                                    <option value="علبة">علبة</option>
+                                    <option value="حبة">حبة</option>
+                                    <option value="كيس">كيس</option>
+                                </InputSelect>
+                            </div>
+                            <div class="form-group">
+                                <label for="shortcutNumber">رقم الاختصار</label>
+                                <InputNumber @bind-Value="productForm.ShortcutNumber" id="shortcutNumber" placeholder="1-999" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Pricing Information -->
+                    <div class="form-section">
+                        <h3 class="section-title">
+                            <i data-lucide="dollar-sign"></i>
+                            <span>معلومات التسعير</span>
+                        </h3>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="purchasePrice">سعر الشراء (ر.س) *</label>
+                                <InputNumber @bind-Value="productForm.PurchasePrice" @oninput="CalculateSellingPrice" id="purchasePrice" step="0.01" required />
+                            </div>
+                            <div class="form-group">
+                                <label for="profitMargin">هامش الربح (ر.ي) *</label>
+                                <InputNumber @bind-Value="productForm.ProfitMargin" @oninput="CalculateSellingPrice" id="profitMargin" step="0.01" required />
+                            </div>
+                        </div>
+                        
+                        <div class="calculated-price">
+                            <label>سعر البيع المحسوب (ر.ي)</label>
+                            <div class="price-display">@calculatedSellingPrice.ToString("F0")</div>
+                        </div>
+                    </div>
+
+                    <!-- Inventory Information -->
+                    <div class="form-section">
+                        <h3 class="section-title">
+                            <i data-lucide="archive"></i>
+                            <span>معلومات المخزون</span>
+                        </h3>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="currentQuantity">الكمية الحالية</label>
+                                <InputNumber @bind-Value="productForm.CurrentQuantity" id="currentQuantity" min="0" />
+                            </div>
+                            <div class="form-group">
+                                <label for="minimumQuantity">الحد الأدنى</label>
+                                <InputNumber @bind-Value="productForm.MinimumQuantity" id="minimumQuantity" min="0" />
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="expiryDate">تاريخ انتهاء الصلاحية</label>
+                            <InputDate @bind-Value="productForm.ExpiryDate" id="expiryDate" />
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="description">الوصف</label>
+                            <InputTextArea @bind-Value="productForm.Description" id="description" rows="3" placeholder="وصف إضافي للمنتج" />
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">
+                            <i data-lucide="save"></i>
+                            <span>حفظ المنتج</span>
+                        </button>
+                        <button type="button" class="btn btn-secondary" @onclick="CloseProductModal">
+                            <span>إلغاء</span>
+                        </button>
+                    </div>
+                </EditForm>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    private List<Product> products = new();
+    private List<Product> filteredProducts = new();
+    private string searchQuery = "";
+    private bool isGridView = true;
+    private bool showProductModal = false;
+    private bool isRecording = false;
+    private Product? editingProduct = null;
+    private ProductForm productForm = new();
+    private decimal calculatedSellingPrice = 0;
+
+    protected override void OnInitialized()
+    {
+        LoadSampleProducts();
+        filteredProducts = products;
+    }
+
+    private void LoadSampleProducts()
+    {
+        products = new List<Product>
+        {
+            new Product
+            {
+                Id = 1,
+                Name = "سكر أبيض",
+                Category = "مواد غذائية",
+                Unit = "كيلو",
+                CurrentQuantity = 5,
+                MinimumQuantity = 10,
+                PurchasePrice = 9.25m,
+                ProfitMargin = 6280,
+                ShortcutNumber = 1,
+                Description = "سكر أبيض عالي الجودة"
+            },
+            new Product
+            {
+                Id = 2,
+                Name = "أرز بسمتي",
+                Category = "مواد غذائية",
+                Unit = "كيلو",
+                CurrentQuantity = 15,
+                MinimumQuantity = 5,
+                PurchasePrice = 13.18m,
+                ProfitMargin = 8960,
+                ShortcutNumber = 2
+            }
+        };
+    }
+
+    private void SetViewMode(bool gridView)
+    {
+        isGridView = gridView;
+    }
+
+    private void OnSearchInput(ChangeEventArgs e)
+    {
+        searchQuery = e.Value?.ToString() ?? "";
+        FilterProducts();
+    }
+
+    private void FilterProducts()
+    {
+        if (string.IsNullOrWhiteSpace(searchQuery))
+        {
+            filteredProducts = products;
+        }
+        else
+        {
+            filteredProducts = products.Where(p =>
+                p.Name.Contains(searchQuery, StringComparison.OrdinalIgnoreCase) ||
+                (p.Category?.Contains(searchQuery, StringComparison.OrdinalIgnoreCase) ?? false) ||
+                (p.ShortcutNumber?.ToString().Contains(searchQuery) ?? false)
+            ).ToList();
+        }
+    }
+
+    private void ToggleVoiceSearch()
+    {
+        isRecording = !isRecording;
+        // Voice search implementation would go here
+    }
+
+    private void OpenProductModal()
+    {
+        editingProduct = null;
+        productForm = new ProductForm();
+        showProductModal = true;
+    }
+
+    private void EditProduct(Product product)
+    {
+        editingProduct = product;
+        productForm = new ProductForm
+        {
+            Name = product.Name,
+            Category = product.Category,
+            Unit = product.Unit,
+            ShortcutNumber = product.ShortcutNumber,
+            PurchasePrice = product.PurchasePrice,
+            ProfitMargin = product.ProfitMargin,
+            CurrentQuantity = product.CurrentQuantity,
+            MinimumQuantity = product.MinimumQuantity,
+            ExpiryDate = product.ExpiryDate,
+            Description = product.Description
+        };
+        CalculateSellingPrice();
+        showProductModal = true;
+    }
+
+    private void CloseProductModal()
+    {
+        showProductModal = false;
+        editingProduct = null;
+        productForm = new ProductForm();
+    }
+
+    private void SaveProduct()
+    {
+        if (editingProduct != null)
+        {
+            // Update existing product
+            editingProduct.Name = productForm.Name;
+            editingProduct.Category = productForm.Category;
+            editingProduct.Unit = productForm.Unit;
+            editingProduct.ShortcutNumber = productForm.ShortcutNumber;
+            editingProduct.PurchasePrice = productForm.PurchasePrice;
+            editingProduct.ProfitMargin = productForm.ProfitMargin;
+            editingProduct.CurrentQuantity = productForm.CurrentQuantity;
+            editingProduct.MinimumQuantity = productForm.MinimumQuantity;
+            editingProduct.ExpiryDate = productForm.ExpiryDate;
+            editingProduct.Description = productForm.Description;
+        }
+        else
+        {
+            // Add new product
+            var newProduct = new Product
+            {
+                Id = products.Max(p => p.Id) + 1,
+                Name = productForm.Name,
+                Category = productForm.Category,
+                Unit = productForm.Unit,
+                ShortcutNumber = productForm.ShortcutNumber,
+                PurchasePrice = productForm.PurchasePrice,
+                ProfitMargin = productForm.ProfitMargin,
+                CurrentQuantity = productForm.CurrentQuantity,
+                MinimumQuantity = productForm.MinimumQuantity,
+                ExpiryDate = productForm.ExpiryDate,
+                Description = productForm.Description
+            };
+            products.Add(newProduct);
+        }
+
+        FilterProducts();
+        CloseProductModal();
+    }
+
+    private void DeleteProduct(int productId)
+    {
+        products.RemoveAll(p => p.Id == productId);
+        FilterProducts();
+    }
+
+    private void CalculateSellingPrice()
+    {
+        if (productForm.PurchasePrice > 0 && productForm.ProfitMargin > 0)
+        {
+            calculatedSellingPrice = (productForm.PurchasePrice * 680) + productForm.ProfitMargin;
+        }
+        else
+        {
+            calculatedSellingPrice = 0;
+        }
+    }
+
+    private void HandleSalesRedirect()
+    {
+        // Navigation to sales page
+    }
+
+    private void HandlePurchaseRedirect()
+    {
+        // Navigation to purchase page
+    }
+
+    private void ShowProductMenu(int productId)
+    {
+        // Show product context menu
+    }
+}

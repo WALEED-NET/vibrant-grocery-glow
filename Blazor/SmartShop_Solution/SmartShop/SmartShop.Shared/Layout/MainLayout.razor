@@ -1,23 +1,222 @@
-﻿@inherits LayoutComponentBase
+@inherits LayoutComponentBase
 
-<div class="page">
-    <div class="sidebar">
-        <NavMenu />
-    </div>
-
-    <main>
-        <div class="top-row px-4">
-            <a href="https://learn.microsoft.com/aspnet/core/" target="_blank">About</a>
+<div class="main-app">
+    <!-- Sidebar -->
+    <aside id="sidebar" class="sidebar">
+        <div class="sidebar-header">
+            <div class="sidebar-brand">
+                <div class="brand-icon">
+                    <i data-lucide="shopping-cart"></i>
+                </div>
+                <div class="brand-text">
+                    <h1>نظام إدارة البقالة الذكية</h1>
+                    <p>إدارة شاملة للمخزون والمبيعات</p>
+                </div>
+            </div>
         </div>
 
-        <article class="content px-4">
+        <div class="sidebar-content">
+            <div class="sidebar-section">
+                <div class="section-label">القوائم الرئيسية</div>
+                <nav class="sidebar-nav">
+                    <NavLink class="nav-item" href="" Match="NavLinkMatch.All">
+                        <i data-lucide="bar-chart-3"></i>
+                        <span>لوحة التحكم</span>
+                    </NavLink>
+                    <NavLink class="nav-item" href="products">
+                        <i data-lucide="package"></i>
+                        <span>إدارة المنتجات</span>
+                    </NavLink>
+                    <NavLink class="nav-item" href="sales">
+                        <i data-lucide="trending-up"></i>
+                        <span>عمليات البيع</span>
+                    </NavLink>
+                    <NavLink class="nav-item" href="purchase">
+                        <i data-lucide="shopping-bag"></i>
+                        <span>عمليات الشراء</span>
+                    </NavLink>
+                    <NavLink class="nav-item" href="shortage">
+                        <i data-lucide="shopping-cart"></i>
+                        <span>سلة النواقص</span>
+                    </NavLink>
+                    <NavLink class="nav-item" href="exchange-rate">
+                        <i data-lucide="dollar-sign"></i>
+                        <span>سعر الصرف</span>
+                    </NavLink>
+                </nav>
+            </div>
+
+            <div class="sidebar-separator"></div>
+
+            <div class="sidebar-section">
+                <div class="section-label">الإدارة والتقارير</div>
+                <nav class="sidebar-nav">
+                    <NavLink class="nav-item" href="units">
+                        <i data-lucide="ruler"></i>
+                        <span>إدارة الوحدات</span>
+                    </NavLink>
+                    <NavLink class="nav-item" href="reports">
+                        <i data-lucide="file-text"></i>
+                        <span>التقارير</span>
+                    </NavLink>
+                </nav>
+            </div>
+
+            <div class="sidebar-separator"></div>
+
+            <div class="sidebar-section">
+                <div class="section-label">الإعدادات</div>
+                <nav class="sidebar-nav">
+                    <NavLink class="nav-item" href="settings">
+                        <i data-lucide="settings"></i>
+                        <span>إعدادات التطبيق</span>
+                    </NavLink>
+                    <NavLink class="nav-item" href="profile">
+                        <i data-lucide="user"></i>
+                        <span>بيانات الحساب</span>
+                    </NavLink>
+                </nav>
+            </div>
+        </div>
+
+        <div class="sidebar-footer">
+            <a href="#" class="nav-item logout">
+                <i data-lucide="log-out"></i>
+                <span>تسجيل الخروج</span>
+            </a>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <div class="header-left">
+                    <button id="sidebarToggle" class="sidebar-toggle">
+                        <i data-lucide="menu"></i>
+                    </button>
+                    <div class="page-title">
+                        <h1 id="pageTitle">@GetPageTitle()</h1>
+                    </div>
+                </div>
+                <div class="header-right">
+                    <button class="app-version-btn">
+                        <i data-lucide="info"></i>
+                        <span>معلومات التطبيق</span>
+                    </button>
+                    <button class="notifications-btn">
+                        <i data-lucide="bell"></i>
+                        <span class="notification-badge">3</span>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Page Content -->
+        <main class="page-content">
             @Body
-        </article>
-    </main>
+        </main>
+    </div>
+
+    <!-- Bottom Navigation (Mobile) -->
+    <nav class="bottom-nav">
+        <NavLink href="" class="bottom-nav-item" Match="NavLinkMatch.All">
+            <i data-lucide="bar-chart-3"></i>
+            <span>الرئيسية</span>
+        </NavLink>
+        <NavLink href="products" class="bottom-nav-item">
+            <i data-lucide="package"></i>
+            <span>المنتجات</span>
+        </NavLink>
+        <NavLink href="sales" class="bottom-nav-item">
+            <i data-lucide="trending-up"></i>
+            <span>البيع</span>
+        </NavLink>
+        <NavLink href="purchase" class="bottom-nav-item">
+            <i data-lucide="shopping-bag"></i>
+            <span>الشراء</span>
+        </NavLink>
+        <button class="bottom-nav-item more-btn" id="moreMenuBtn">
+            <i data-lucide="more-horizontal"></i>
+            <span>المزيد</span>
+        </button>
+    </nav>
+
+    <!-- More Menu Modal (Mobile) -->
+    <div id="moreMenuModal" class="more-menu-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>المزيد من الخيارات</h3>
+                <p>اختر القسم الذي تريد الوصول إليه</p>
+            </div>
+            <div class="modal-body">
+                <NavLink href="shortage" class="more-menu-item">
+                    <i data-lucide="shopping-cart"></i>
+                    <div class="item-content">
+                        <div class="item-title">سلة النواقص</div>
+                        <div class="item-description">إدارة المنتجات الناقصة</div>
+                    </div>
+                </NavLink>
+                <NavLink href="exchange-rate" class="more-menu-item">
+                    <i data-lucide="dollar-sign"></i>
+                    <div class="item-content">
+                        <div class="item-title">سعر الصرف</div>
+                        <div class="item-description">تحديث أسعار الصرف</div>
+                    </div>
+                </NavLink>
+                <NavLink href="units" class="more-menu-item">
+                    <i data-lucide="ruler"></i>
+                    <div class="item-content">
+                        <div class="item-title">إدارة الوحدات</div>
+                        <div class="item-description">إضافة وتعديل وحدات القياس</div>
+                    </div>
+                </NavLink>
+                <NavLink href="reports" class="more-menu-item">
+                    <i data-lucide="file-text"></i>
+                    <div class="item-content">
+                        <div class="item-title">التقارير</div>
+                        <div class="item-description">تقارير المبيعات والمخزون</div>
+                    </div>
+                </NavLink>
+                <NavLink href="settings" class="more-menu-item">
+                    <i data-lucide="settings"></i>
+                    <div class="item-content">
+                        <div class="item-title">الإعدادات</div>
+                        <div class="item-description">إعدادات التطبيق العامة</div>
+                    </div>
+                </NavLink>
+                <NavLink href="profile" class="more-menu-item">
+                    <i data-lucide="user"></i>
+                    <div class="item-content">
+                        <div class="item-title">بيانات الحساب</div>
+                        <div class="item-description">إدارة بيانات المستخدم</div>
+                    </div>
+                </NavLink>
+            </div>
+        </div>
+    </div>
 </div>
 
-<div id="blazor-error-ui" data-nosnippet>
-    An unhandled error has occurred.
-    <a href="." class="reload">Reload</a>
-    <span class="dismiss">🗙</span>
-</div>
+@code {
+    [Inject] private NavigationManager Navigation { get; set; } = default!;
+
+    private string GetPageTitle()
+    {
+        var uri = Navigation.ToBaseRelativePath(Navigation.Uri);
+        return uri switch
+        {
+            "" => "لوحة التحكم",
+            "products" => "إدارة المنتجات",
+            "sales" => "عمليات البيع",
+            "purchase" => "عمليات الشراء",
+            "shortage" => "سلة النواقص",
+            "exchange-rate" => "سعر الصرف",
+            "units" => "إدارة الوحدات",
+            "reports" => "التقارير",
+            "settings" => "الإعدادات",
+            "profile" => "بيانات الحساب",
+            _ => "البقالة الذكية"
+        };
+    }
+}

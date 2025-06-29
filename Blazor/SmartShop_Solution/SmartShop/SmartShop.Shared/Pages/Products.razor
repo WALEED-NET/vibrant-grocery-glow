@@ -127,10 +127,7 @@
 
                                         <!-- Purchase Price -->
                                         <div class="info-item purchase-price">
-                                            <div class="info-label">
-                                                <i data-lucide="shopping-cart"></i>
-                                                سعر الشراء
-                                            </div>
+                                            <div class="info-label">سعر الشراء</div>
                                             <div class="price-breakdown">
                                                 <div class="price-primary">@FormatPrice(product.PurchasePrice, "SAR")</div>
                                                 <div class="price-secondary">@FormatPrice(product.PurchasePrice * ExchangeRate, "YER")</div>
@@ -139,10 +136,7 @@
 
                                         <!-- Selling Price -->
                                         <div class="info-item selling-price">
-                                            <div class="info-label">
-                                                <i data-lucide="tag"></i>
-                                                سعر البيع
-                                            </div>
+                                            <div class="info-label">سعر البيع</div>
                                             <div class="price-breakdown">
                                                 <div class="price-primary">@FormatPrice(product.SellingPrice, "SAR")</div>
                                                 <div class="price-secondary">@FormatPrice(product.SellingPrice * ExchangeRate, "YER")</div>
@@ -151,10 +145,7 @@
 
                                         <!-- Profit Margin -->
                                         <div class="info-item profit">
-                                            <div class="info-label">
-                                                <i data-lucide="trending-up"></i>
-                                                هامش الربح
-                                            </div>
+                                            <div class="info-label">هامش الربح</div>
                                             <div class="info-value @(product.ProfitMargin > 0 ? "profit-positive" : "profit-negative")">
                                                 @FormatPrice(product.ProfitMargin, "YER")
                                             </div>
@@ -237,7 +228,7 @@
 <!-- Product Modal -->
 @if (showProductModal)
 {
-    <div class="modal-overlay active" @onclick="CloseModalOnBackdrop">
+    <div class="modal-overlay active" @onclick="CloseModalOnBackdrop" @onclick:stopPropagation="false">
         <div class="modal-container" @onclick:stopPropagation="true">
             <div class="modal-header">
                 <h2>@(editingProduct != null ? "تعديل منتج" : "إضافة منتج جديد")</h2>

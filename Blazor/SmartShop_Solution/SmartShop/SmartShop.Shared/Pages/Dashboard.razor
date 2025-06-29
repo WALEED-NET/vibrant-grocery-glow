@@ -1,4 +1,4 @@
-@using SmartShop.Shared.Services
+﻿@using SmartShop.Shared.Services
 @inject IFormFactor FormFactor
 @inject NavigationManager Navigation
 
@@ -7,7 +7,7 @@
 <div class="page-content">
     <!-- Stats Grid -->
     <div class="stats-grid">
-        <div class="stat-card" @onclick="() => Navigation.NavigateTo('/products')">
+        <div class="stat-card" @onclick='() => Navigation.NavigateTo("/products")'>
             <div class="stat-icon products-icon">
                 <i data-lucide="package"></i>
             </div>
@@ -140,7 +140,7 @@
             <span>إجراءات سريعة</span>
         </h2>
         <div class="actions-grid">
-            <button class="action-card" @onclick="() => Navigation.NavigateTo('/products')">
+            <button class="action-card" @onclick='() => Navigation.NavigateTo("/products")'>
                 <div class="action-icon products-action">
                     <i data-lucide="plus"></i>
                 </div>
@@ -150,7 +150,7 @@
                 </div>
             </button>
 
-            <button class="action-card" @onclick="() => Navigation.NavigateTo('/sales')">
+            <button class="action-card" >
                 <div class="action-icon sales-action">
                     <i data-lucide="shopping-cart"></i>
                 </div>
@@ -160,7 +160,7 @@
                 </div>
             </button>
 
-            <button class="action-card" @onclick="() => Navigation.NavigateTo('/purchase')">
+            <button class="action-card" >
                 <div class="action-icon purchase-action">
                     <i data-lucide="shopping-bag"></i>
                 </div>
@@ -170,7 +170,7 @@
                 </div>
             </button>
 
-            <button class="action-card" @onclick="() => Navigation.NavigateTo('/reports')">
+            <button class="action-card" >
                 <div class="action-icon reports-action">
                     <i data-lucide="bar-chart-3"></i>
                 </div>

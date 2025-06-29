@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
@@ -123,7 +124,18 @@
                         </div>
                     </div>
                     <div class="header-right">
-                        <button class="btn btn-primary" id="addProductBtn">
+                        <!-- Mobile Action Buttons -->
+                        <div class="mobile-actions">
+                            <button class="btn btn-secondary" id="purchaseBtn">
+                                <i data-lucide="trending-up"></i>
+                                <span>عملية شراء</span>
+                            </button>
+                            <button class="btn btn-primary" id="saleBtn">
+                                <i data-lucide="shopping-bag"></i>
+                                <span>عملية بيع</span>
+                            </button>
+                        </div>
+                        <button class="btn btn-success" id="addProductBtn">
                             <i data-lucide="plus"></i>
                             <span>إضافة منتج جديد</span>
                         </button>
@@ -135,6 +147,20 @@
             <main class="page-content">
                 <!-- Products Management Content -->
                 <div id="productsContent" class="content-section active">
+                    <!-- Action Buttons for Desktop -->
+                    <div class="desktop-actions" style="display: none;">
+                        <div style="display: flex; gap: 1rem; margin-bottom: 1.5rem; padding: 0 2rem;">
+                            <button class="btn btn-secondary" id="purchaseBtnDesktop">
+                                <i data-lucide="trending-up"></i>
+                                <span>عملية شراء</span>
+                            </button>
+                            <button class="btn btn-primary" id="saleBtnDesktop">
+                                <i data-lucide="shopping-bag"></i>
+                                <span>عملية بيع</span>
+                            </button>
+                        </div>
+                    </div>
+
                     <!-- Search and Filters -->
                     <div class="products-toolbar">
                         <div class="search-container">
@@ -245,5 +271,24 @@
     <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
     <script src="js/main.js"></script>
     <script src="js/products.js"></script>
+    
+    <script>
+        // Show/hide desktop actions based on screen size
+        function toggleDesktopActions() {
+            const desktopActions = document.querySelector('.desktop-actions');
+            const mobileActions = document.querySelector('.mobile-actions');
+            
+            if (window.innerWidth >= 768) {
+                if (desktopActions) desktopActions.style.display = 'block';
+                if (mobileActions) mobileActions.style.display = 'none';
+            } else {
+                if (desktopActions) desktopActions.style.display = 'none';
+                if (mobileActions) mobileActions.style.display = 'flex';
+            }
+        }
+        
+        window.addEventListener('resize', toggleDesktopActions);
+        document.addEventListener('DOMContentLoaded', toggleDesktopActions);
+    </script>
 </body>
 </html>

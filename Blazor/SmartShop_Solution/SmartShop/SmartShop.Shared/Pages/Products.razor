@@ -37,7 +37,7 @@
                 <div class="header-left">
                     <h2 class="card-title">
                         <i data-lucide="package"></i>
-                        <span>قائمة المنتجات (@products.Count)</span>
+                        <span>قائمة المنتجات (@filteredProducts.Count)</span>
                     </h2>
                 </div>
                 
@@ -57,7 +57,7 @@
             
             <div class="search-section">
                 <div class="search-container">
-                    <input type="text" @bind="searchQuery" @oninput="OnSearchInput" class="search-input" placeholder="البحث بالاسم، الفئة أو رقم الإختصار...">
+                    <input type="text" @bind="searchQuery" @bind:event="oninput" class="search-input" placeholder="البحث بالاسم، الفئة أو رقم الإختصار...">
                     <i data-lucide="search" class="search-icon"></i>
                 </div>
                 <button class="voice-search-btn @(isRecording ? "recording" : "")" @onclick="ToggleVoiceSearch">
@@ -73,7 +73,7 @@
                     <div class="products-grid active">
                         @foreach (var product in filteredProducts)
                         {
-                            <div class="product-card @(product.IsLowStock ? "low-stock" : "") @(product.IsExpiringSoon ? "expiring-soon" : "")">
+                            <div class="product-card @GetProductCardClasses(product)">
                                 <!-- Product Card Header -->
                                 <div class="product-header">
                                     <div class="product-title-row">
@@ -131,8 +131,8 @@
                                                 سعر الشراء
                                             </div>
                                             <div class="price-breakdown">
-                                                <div class="price-primary">@product.PurchasePrice.ToString("F2") ر.س</div>
-                                                <div class="price-secondary">@((product.PurchasePrice * 680).ToString("F0")) ر.ي</div>
+                                                <div class="price-primary">@FormatPrice(product.PurchasePrice, "SAR")</div>
+                                                <div class="price-secondary">@FormatPrice(product.PurchasePrice * ExchangeRate, "YER")</div>
                                             </div>
                                         </div>
 
@@ -143,8 +143,8 @@
                                                 سعر البيع
                                             </div>
                                             <div class="price-breakdown">
-                                                <div class="price-primary">@product.SellingPrice.ToString("F2") ر.س</div>
-                                                <div class="price-secondary">@((product.SellingPrice * 680).ToString("F0")) ر.ي</div>
+                                                <div class="price-primary">@FormatPrice(product.SellingPrice, "SAR")</div>
+                                                <div class="price-secondary">@FormatPrice(product.SellingPrice * ExchangeRate, "YER")</div>
                                             </div>
                                         </div>
 
@@ -155,7 +155,7 @@
                                                 هامش الربح
                                             </div>
                                             <div class="info-value @(product.ProfitMargin > 0 ? "profit-positive" : "profit-negative")">
-                                                @product.ProfitMargin.ToString("F0") ر.ي
+                                                @FormatPrice(product.ProfitMargin, "YER")
                                             </div>
                                         </div>
                                     </div>
@@ -198,12 +198,12 @@
                                 </div>
                                 
                                 <div class="row-prices">
-                                    <div>شراء: @product.PurchasePrice.ToString("F2") ر.س</div>
-                                    <div>بيع: @product.SellingPrice.ToString("F2") ر.س</div>
+                                    <div>شراء: @FormatPrice(product.PurchasePrice, "SAR")</div>
+                                    <div>بيع: @FormatPrice(product.SellingPrice, "SAR")</div>
                                 </div>
                                 
                                 <div class="row-prices">
-                                    <div>ربح: @product.ProfitMargin.ToString("F0") ر.ي</div>
+                                    <div>ربح: @FormatPrice(product.ProfitMargin, "YER")</div>
                                 </div>
                                 
                                 <div class="row-actions">
@@ -236,8 +236,8 @@
 <!-- Product Modal -->
 @if (showProductModal)
 {
-    <div class="modal-overlay active">
-        <div class="modal-container">
+    <div class="modal-overlay active" @onclick="CloseModalOnBackdrop" @onclick:stopPropagation="true">
+        <div class="modal-container" @onclick:stopPropagation="true">
             <div class="modal-header">
                 <h2>@(editingProduct != null ? "تعديل منتج" : "إضافة منتج جديد")</h2>
                 <button class="modal-close" @onclick="CloseProductModal">
@@ -246,6 +246,8 @@
             </div>
             <div class="modal-content">
                 <EditForm Model="productForm" OnValidSubmit="SaveProduct" class="product-form">
+                    <DataAnnotationsValidator />
+                    
                     <!-- Basic Information -->
                     <div class="form-section">
                         <h3 class="section-title">
@@ -257,6 +259,7 @@
                             <div class="form-group">
                                 <label for="productName">اسم المنتج *</label>
                                 <InputText @bind-Value="productForm.Name" id="productName" required />
+                                <ValidationMessage For="() => productForm.Name" />
                             </div>
                             <div class="form-group">
                                 <label for="productCategory">الفئة</label>
@@ -276,6 +279,7 @@
                                     <option value="حبة">حبة</option>
                                     <option value="كيس">كيس</option>
                                 </InputSelect>
+                                <ValidationMessage For="() => productForm.Unit" />
                             </div>
                             <div class="form-group">
                                 <label for="shortcutNumber">رقم الاختصار</label>
@@ -294,17 +298,19 @@
                         <div class="form-row">
                             <div class="form-group">
                                 <label for="purchasePrice">سعر الشراء (ر.س) *</label>
-                                <InputNumber @bind-Value="productForm.PurchasePrice" @oninput="CalculateSellingPrice" id="purchasePrice" step="0.01" required />
+                                <InputNumber @bind-Value="productForm.PurchasePrice" @bind:event="oninput" id="purchasePrice" step="0.01" required />
+                                <ValidationMessage For="() => productForm.PurchasePrice" />
                             </div>
                             <div class="form-group">
                                 <label for="profitMargin">هامش الربح (ر.ي) *</label>
-                                <InputNumber @bind-Value="productForm.ProfitMargin" @oninput="CalculateSellingPrice" id="profitMargin" step="0.01" required />
+                                <InputNumber @bind-Value="productForm.ProfitMargin" @bind:event="oninput" id="profitMargin" step="0.01" required />
+                                <ValidationMessage For="() => productForm.ProfitMargin" />
                             </div>
                         </div>
                         
                         <div class="calculated-price">
                             <label>سعر البيع المحسوب (ر.ي)</label>
-                            <div class="price-display">@calculatedSellingPrice.ToString("F0")</div>
+                            <div class="price-display">@CalculatedSellingPrice.ToString("N0")</div>
                         </div>
                     </div>
 
@@ -361,12 +367,23 @@
     private bool isRecording = false;
     private Product? editingProduct = null;
     private ProductForm productForm = new();
-    private decimal calculatedSellingPrice = 0;
+    private const decimal ExchangeRate = 680m;
+
+    // Computed property for calculated selling price
+    private decimal CalculatedSellingPrice => 
+        productForm.PurchasePrice > 0 && productForm.ProfitMargin > 0 
+            ? (productForm.PurchasePrice * ExchangeRate) + productForm.ProfitMargin 
+            : 0;
 
     protected override void OnInitialized()
     {
         LoadSampleProducts();
         filteredProducts = products;
+    }
+
+    protected override void OnParametersSet()
+    {
+        FilterProducts();
     }
 
     private void LoadSampleProducts()
@@ -397,6 +414,19 @@
                 PurchasePrice = 13.18m,
                 ProfitMargin = 8960,
                 ShortcutNumber = 2
+            },
+            new Product
+            {
+                Id = 3,
+                Name = "زيت دوار الشمس",
+                Category = "مواد غذائية",
+                Unit = "لتر",
+                CurrentQuantity = 2,
+                MinimumQuantity = 5,
+                PurchasePrice = 16.97m,
+                ProfitMargin = 11540,
+                ShortcutNumber = 3,
+                ExpiryDate = DateTime.Now.AddDays(20)
             }
         };
     }
@@ -404,12 +434,7 @@
     private void SetViewMode(bool gridView)
     {
         isGridView = gridView;
-    }
-
-    private void OnSearchInput(ChangeEventArgs e)
-    {
-        searchQuery = e.Value?.ToString() ?? "";
-        FilterProducts();
+        StateHasChanged();
     }
 
     private void FilterProducts()
@@ -426,12 +451,14 @@
                 (p.ShortcutNumber?.ToString().Contains(searchQuery) ?? false)
             ).ToList();
         }
+        StateHasChanged();
     }
 
     private void ToggleVoiceSearch()
     {
         isRecording = !isRecording;
-        // Voice search implementation would go here
+        // Voice search would be implemented with JS interop if needed
+        StateHasChanged();
     }
 
     private void OpenProductModal()
@@ -439,6 +466,7 @@
         editingProduct = null;
         productForm = new ProductForm();
         showProductModal = true;
+        StateHasChanged();
     }
 
     private void EditProduct(Product product)
@@ -457,8 +485,8 @@
             ExpiryDate = product.ExpiryDate,
             Description = product.Description
         };
-        CalculateSellingPrice();
         showProductModal = true;
+        StateHasChanged();
     }
 
     private void CloseProductModal()
@@ -466,6 +494,13 @@
         showProductModal = false;
         editingProduct = null;
         productForm = new ProductForm();
+        StateHasChanged();
+    }
+
+    private void CloseModalOnBackdrop(MouseEventArgs e)
+    {
+        // Only close if clicking on the backdrop (modal-overlay)
+        CloseProductModal();
     }
 
     private void SaveProduct()
@@ -489,7 +524,7 @@
             // Add new product
             var newProduct = new Product
             {
-                Id = products.Max(p => p.Id) + 1,
+                Id = products.Any() ? products.Max(p => p.Id) + 1 : 1,
                 Name = productForm.Name,
                 Category = productForm.Category,
                 Unit = productForm.Unit,
@@ -514,18 +549,6 @@
         FilterProducts();
     }
 
-    private void CalculateSellingPrice()
-    {
-        if (productForm.PurchasePrice > 0 && productForm.ProfitMargin > 0)
-        {
-            calculatedSellingPrice = (productForm.PurchasePrice * 680) + productForm.ProfitMargin;
-        }
-        else
-        {
-            calculatedSellingPrice = 0;
-        }
-    }
-
     private void HandleSalesRedirect()
     {
         // Navigation to sales page
@@ -539,5 +562,28 @@
     private void ShowProductMenu(int productId)
     {
         // Show product context menu
+    }
+
+    private string GetProductCardClasses(Product product)
+    {
+        var classes = new List<string>();
+        
+        if (product.IsLowStock)
+            classes.Add("low-stock");
+            
+        if (product.IsExpiringSoon)
+            classes.Add("expiring-soon");
+            
+        return string.Join(" ", classes);
+    }
+
+    private string FormatPrice(decimal price, string currency)
+    {
+        return currency switch
+        {
+            "SAR" => $"{price:F2} ر.س",
+            "YER" => $"{price:N0} ر.ي",
+            _ => price.ToString("N2")
+        };
     }
 }

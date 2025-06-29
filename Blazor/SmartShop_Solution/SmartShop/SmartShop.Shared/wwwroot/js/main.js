@@ -1,4 +1,4 @@
-// Main JavaScript functionality for Blazor app
+// Minimal JavaScript for Blazor app - Only essential UI interactions
 
 document.addEventListener('DOMContentLoaded', function() {
     // Initialize Lucide icons
@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', function() {
         lucide.createIcons();
     }
 
-    // Initialize sidebar toggle
+    // Initialize sidebar toggle for mobile
     initializeSidebarToggle();
     
     // Initialize bottom navigation
@@ -15,8 +15,8 @@ document.addEventListener('DOMContentLoaded', function() {
     // Initialize more menu modal
     initializeMoreMenuModal();
     
-    // Initialize responsive behavior
-    initializeResponsiveBehavior();
+    // Re-initialize icons when Blazor navigates
+    initializeMutationObserver();
 });
 
 function initializeSidebarToggle() {
@@ -40,19 +40,6 @@ function initializeSidebarToggle() {
 }
 
 function initializeBottomNavigation() {
-    const bottomNavItems = document.querySelectorAll('.bottom-nav-item:not(.more-btn)');
-    
-    bottomNavItems.forEach(item => {
-        item.addEventListener('click', function() {
-            // Remove active class from all items
-            bottomNavItems.forEach(navItem => navItem.classList.remove('active'));
-            // Add active class to clicked item
-            this.classList.add('active');
-        });
-    });
-}
-
-function initializeMoreMenuModal() {
     const moreMenuBtn = document.getElementById('moreMenuBtn');
     const moreMenuModal = document.getElementById('moreMenuModal');
     
@@ -60,7 +47,13 @@ function initializeMoreMenuModal() {
         moreMenuBtn.addEventListener('click', function() {
             moreMenuModal.classList.add('active');
         });
-        
+    }
+}
+
+function initializeMoreMenuModal() {
+    const moreMenuModal = document.getElementById('moreMenuModal');
+    
+    if (moreMenuModal) {
         // Close modal when clicking outside
         moreMenuModal.addEventListener('click', function(e) {
             if (e.target === moreMenuModal) {
@@ -78,16 +71,8 @@ function initializeMoreMenuModal() {
     }
 }
 
-function initializeResponsiveBehavior() {
-    // Handle window resize
-    window.addEventListener('resize', function() {
-        const sidebar = document.getElementById('sidebar');
-        if (window.innerWidth > 768 && sidebar) {
-            sidebar.classList.remove('open');
-        }
-    });
-    
-    // Update icons when DOM changes (for Blazor navigation)
+function initializeMutationObserver() {
+    // Re-initialize icons when DOM changes (for Blazor navigation)
     const observer = new MutationObserver(function(mutations) {
         mutations.forEach(function(mutation) {
             if (mutation.type === 'childList' && mutation.addedNodes.length > 0) {
@@ -105,61 +90,10 @@ function initializeResponsiveBehavior() {
     });
 }
 
-// Utility functions for components
-window.SmartShopUtils = {
-    // Format currency
-    formatCurrency: function(amount, currency = 'YER') {
-        return new Intl.NumberFormat('ar-YE', {
-            style: 'decimal',
-            minimumFractionDigits: 0,
-            maximumFractionDigits: 0
-        }).format(amount) + (currency === 'YER' ? ' ر.ي' : ' ر.س');
-    },
-    
-    // Calculate selling price
-    calculateSellingPrice: function(purchasePrice, profitMargin, exchangeRate = 680) {
-        return (purchasePrice * exchangeRate) + profitMargin;
-    },
-    
-    // Check if product is low stock
-    isLowStock: function(currentQuantity, minimumQuantity) {
-        return currentQuantity <= minimumQuantity;
-    },
-    
-    // Check if product is expiring soon
-    isExpiringSoon: function(expiryDate, daysThreshold = 30) {
-        if (!expiryDate) return false;
-        const today = new Date();
-        const expiry = new Date(expiryDate);
-        const diffTime = expiry - today;
-        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-        return diffDays <= daysThreshold && diffDays >= 0;
-    },
-    
-    // Show notification
-    showNotification: function(message, type = 'info') {
-        // Implementation for showing notifications
-        console.log(`${type.toUpperCase()}: ${message}`);
-    },
-    
-    // Debounce function for search
-    debounce: function(func, wait) {
-        let timeout;
-        return function executedFunction(...args) {
-            const later = () => {
-                clearTimeout(timeout);
-                func(...args);
-            };
-            clearTimeout(timeout);
-            timeout = setTimeout(later, wait);
-        };
+// Handle window resize for responsive behavior
+window.addEventListener('resize', function() {
+    const sidebar = document.getElementById('sidebar');
+    if (window.innerWidth > 768 && sidebar) {
+        sidebar.classList.remove('open');
     }
-};
-
-// Export for use in Blazor components
-window.blazorCulture = {
-    get: () => 'ar-YE',
-    set: (culture) => {
-        // Implementation for culture setting
-    }
-};
+});

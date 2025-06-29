@@ -1,6 +1,7 @@
 @page "/"
 @using SmartShop.Shared.Services
 @inject IFormFactor FormFactor
+@inject NavigationManager Navigation
 
 <PageTitle>لوحة التحكم - البقالة الذكية</PageTitle>
 
@@ -13,7 +14,7 @@
             </div>
             <div class="stat-content">
                 <div class="stat-label">إجمالي المنتجات</div>
-                <div class="stat-value" id="totalProducts">20</div>
+                <div class="stat-value">@totalProducts</div>
             </div>
         </div>
 
@@ -25,11 +26,11 @@
                 <div class="stat-label">قيمة المخزون</div>
                 <div class="stat-value">
                     <div class="primary-value">
-                        <span id="inventoryValueYER">2,450,000</span>
+                        <span>@inventoryValueYER.ToString("N0")</span>
                         <span class="currency">ر.ي</span>
                     </div>
                     <div class="secondary-value">
-                        <span>≈ 3,603</span>
+                        <span>≈ @((inventoryValueYER / exchangeRate).ToString("N0"))</span>
                         <span class="currency">ر.س</span>
                     </div>
                 </div>
@@ -42,7 +43,7 @@
             </div>
             <div class="stat-content">
                 <div class="stat-label">المنتجات الناقصة</div>
-                <div class="stat-value" id="shortageCount">4</div>
+                <div class="stat-value">@shortageCount</div>
             </div>
         </div>
 
@@ -54,11 +55,11 @@
                 <div class="stat-label">الربح اليومي</div>
                 <div class="stat-value">
                     <div class="primary-value">
-                        <span id="dailyProfitYER">125,000</span>
+                        <span>@dailyProfitYER.ToString("N0")</span>
                         <span class="currency">ر.ي</span>
                     </div>
                     <div class="secondary-value">
-                        <span>≈ 184</span>
+                        <span>≈ @((dailyProfitYER / exchangeRate).ToString("N0"))</span>
                         <span class="currency">ر.س</span>
                     </div>
                 </div>
@@ -79,7 +80,7 @@
             <div class="card-content">
                 <div class="exchange-rate-display">
                     <div class="rate-value">
-                        <span id="currentExchangeRate">680</span>
+                        <span>@exchangeRate.ToString("N0")</span>
                         <span class="currency">ر.ي</span>
                     </div>
                     <div class="rate-description">
@@ -88,15 +89,15 @@
                     <div class="rate-examples">
                         <div class="rate-example">
                             <div class="example-label">10 ر.س</div>
-                            <div class="example-value">6,800</div>
+                            <div class="example-value">@((10 * exchangeRate).ToString("N0"))</div>
                         </div>
                         <div class="rate-example">
                             <div class="example-label">50 ر.س</div>
-                            <div class="example-value">34,000</div>
+                            <div class="example-value">@((50 * exchangeRate).ToString("N0"))</div>
                         </div>
                         <div class="rate-example">
                             <div class="example-label">100 ر.س</div>
-                            <div class="example-value">68,000</div>
+                            <div class="example-value">@((100 * exchangeRate).ToString("N0"))</div>
                         </div>
                     </div>
                 </div>
@@ -109,37 +110,22 @@
                 <h2 class="card-title">آخر تحديثات الأسعار</h2>
             </div>
             <div class="card-content">
-                <div class="updates-list" id="recentUpdates">
-                    <div class="update-item">
-                        <div class="update-info">
-                            <div class="product-name">سكر أبيض</div>
-                            <div class="update-date">2024-01-15</div>
+                <div class="updates-list">
+                    @foreach (var update in recentUpdates)
+                    {
+                        <div class="update-item">
+                            <div class="update-info">
+                                <div class="product-name">@update.ProductName</div>
+                                <div class="update-date">@update.Date.ToString("yyyy-MM-dd")</div>
+                            </div>
+                            <div class="update-price">
+                                <div class="new-price">@update.NewPrice.ToString("N0") ر.ي</div>
+                                <div class="price-change @(update.Change > 0 ? "positive" : "negative")">
+                                    @(update.Change > 0 ? "+" : "")@update.Change.ToString("N0") ر.ي
+                                </div>
+                            </div>
                         </div>
-                        <div class="update-price">
-                            <div class="new-price">6,280 ر.ي</div>
-                            <div class="price-change positive">+500 ر.ي</div>
-                        </div>
-                    </div>
-                    <div class="update-item">
-                        <div class="update-info">
-                            <div class="product-name">أرز بسمتي</div>
-                            <div class="update-date">2024-01-14</div>
-                        </div>
-                        <div class="update-price">
-                            <div class="new-price">8,960 ر.ي</div>
-                            <div class="price-change positive">+800 ر.ي</div>
-                        </div>
-                    </div>
-                    <div class="update-item">
-                        <div class="update-info">
-                            <div class="product-name">زيت دوار الشمس</div>
-                            <div class="update-date">2024-01-13</div>
-                        </div>
-                        <div class="update-price">
-                            <div class="new-price">11,540 ر.ي</div>
-                            <div class="price-change positive">+1,000 ر.ي</div>
-                        </div>
-                    </div>
+                    }
                 </div>
             </div>
         </div>
@@ -156,46 +142,19 @@
         </div>
         <div class="card-content">
             <div class="coming-soon-grid">
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i data-lucide="database"></i>
+                @foreach (var feature in comingSoonFeatures)
+                {
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i data-lucide="@feature.Icon"></i>
+                        </div>
+                        <div class="feature-content">
+                            <h3>@feature.Title</h3>
+                            <p>@feature.Subtitle</p>
+                            <small>@feature.Description</small>
+                        </div>
                     </div>
-                    <div class="feature-content">
-                        <h3>إدارة المخزون المتقدمة</h3>
-                        <p>تتبع دقيق للمخزون</p>
-                        <small>إشعارات ذكية وتحليلات متقدمة</small>
-                    </div>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i data-lucide="bar-chart-3"></i>
-                    </div>
-                    <div class="feature-content">
-                        <h3>تقارير وتحليلات</h3>
-                        <p>تقارير شاملة</p>
-                        <small>رسوم بيانية وإحصائيات مفصلة</small>
-                    </div>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i data-lucide="users"></i>
-                    </div>
-                    <div class="feature-content">
-                        <h3>إدارة العملاء</h3>
-                        <p>نظام العملاء</p>
-                        <small>نقاط الولاء والمدفوعات الآجلة</small>
-                    </div>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i data-lucide="file-text"></i>
-                    </div>
-                    <div class="feature-content">
-                        <h3>الالتزامات المالية</h3>
-                        <p>إدارة المصروفات</p>
-                        <small>رواتب، إيجارات، فواتير الخدمات</small>
-                    </div>
-                </div>
+                }
             </div>
             <div class="coming-soon-notice">
                 🚀 ستكون هذه الميزات متاحة في الإصدار الثاني من النظام
@@ -205,8 +164,84 @@
 </div>
 
 @code {
+    private int totalProducts = 20;
+    private decimal inventoryValueYER = 2450000;
+    private int shortageCount = 4;
+    private decimal dailyProfitYER = 125000;
+    private decimal exchangeRate = 680;
+
+    private List<PriceUpdate> recentUpdates = new();
+    private List<ComingSoonFeature> comingSoonFeatures = new();
+
+    protected override void OnInitialized()
+    {
+        LoadRecentUpdates();
+        LoadComingSoonFeatures();
+    }
+
+    private void LoadRecentUpdates()
+    {
+        recentUpdates = new List<PriceUpdate>
+        {
+            new PriceUpdate { ProductName = "سكر أبيض", Date = DateTime.Now.AddDays(-1), NewPrice = 6280, Change = 500 },
+            new PriceUpdate { ProductName = "أرز بسمتي", Date = DateTime.Now.AddDays(-2), NewPrice = 8960, Change = 800 },
+            new PriceUpdate { ProductName = "زيت دوار الشمس", Date = DateTime.Now.AddDays(-3), NewPrice = 11540, Change = 1000 }
+        };
+    }
+
+    private void LoadComingSoonFeatures()
+    {
+        comingSoonFeatures = new List<ComingSoonFeature>
+        {
+            new ComingSoonFeature 
+            { 
+                Icon = "database", 
+                Title = "إدارة المخزون المتقدمة", 
+                Subtitle = "تتبع دقيق للمخزون", 
+                Description = "إشعارات ذكية وتحليلات متقدمة" 
+            },
+            new ComingSoonFeature 
+            { 
+                Icon = "bar-chart-3", 
+                Title = "تقارير وتحليلات", 
+                Subtitle = "تقارير شاملة", 
+                Description = "رسوم بيانية وإحصائيات مفصلة" 
+            },
+            new ComingSoonFeature 
+            { 
+                Icon = "users", 
+                Title = "إدارة العملاء", 
+                Subtitle = "نظام العملاء", 
+                Description = "نقاط الولاء والمدفوعات الآجلة" 
+            },
+            new ComingSoonFeature 
+            { 
+                Icon = "file-text", 
+                Title = "الالتزامات المالية", 
+                Subtitle = "إدارة المصروفات", 
+                Description = "رواتب، إيجارات، فواتير الخدمات" 
+            }
+        };
+    }
+
     private void NavigateToShortage()
     {
-        // Navigation logic for shortage page
+        Navigation.NavigateTo("/shortage");
+    }
+
+    public class PriceUpdate
+    {
+        public string ProductName { get; set; } = string.Empty;
+        public DateTime Date { get; set; }
+        public decimal NewPrice { get; set; }
+        public decimal Change { get; set; }
+    }
+
+    public class ComingSoonFeature
+    {
+        public string Icon { get; set; } = string.Empty;
+        public string Title { get; set; } = string.Empty;
+        public string Subtitle { get; set; } = string.Empty;
+        public string Description { get; set; } = string.Empty;
     }
 }

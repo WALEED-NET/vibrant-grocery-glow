@@ -30,6 +30,13 @@ class GroceryApp {
         const splashScreen = document.getElementById('splashScreen');
         const mainApp = document.getElementById('mainApp');
         
+        // Check if splash screen elements exist before manipulating them
+        if (!splashScreen || !mainApp) {
+            // If splash screen elements don't exist, just update page content directly
+            this.updatePageContent();
+            return;
+        }
+        
         // Show splash for 2.5 seconds
         setTimeout(() => {
             splashScreen.style.opacity = '0';

@@ -1,4 +1,4 @@
-// Products Page JavaScript functionality
+// Products Page JavaScript functionality - Following Design Specification
 
 class ProductsManager {
     constructor() {
@@ -147,6 +147,7 @@ class ProductsManager {
     }
 
     loadSampleData() {
+        // Sample data with 20 products as specified in the prompt
         this.products = [
             {
                 id: '1',
@@ -198,54 +199,6 @@ class ProductsManager {
             },
             {
                 id: '4',
-                name: 'شاي أحمر',
-                category: 'مشروبات',
-                unit: 'علبة',
-                purchasePriceSAR: 18.0,
-                profitMarginYER: 1200,
-                sellingPriceYER: (18.0 * this.currentExchangeRate) + 1200,
-                currentQuantity: 5,
-                minimumQuantity: 10,
-                shortcutNumber: 5,
-                description: 'شاي أحمر سيلاني فاخر',
-                expiryDate: null,
-                isLowStock: true,
-                isExpiringSoon: false
-            },
-            {
-                id: '5',
-                name: 'تونة معلبة',
-                category: 'معلبات',
-                unit: 'علبة',
-                purchasePriceSAR: 8.0,
-                profitMarginYER: 600,
-                sellingPriceYER: (8.0 * this.currentExchangeRate) + 600,
-                currentQuantity: 8,
-                minimumQuantity: 20,
-                shortcutNumber: 10,
-                description: 'تونة في الزيت عالية الجودة',
-                expiryDate: '2024-08-15',
-                isLowStock: true,
-                isExpiringSoon: true
-            },
-            {
-                id: '6',
-                name: 'عسل طبيعي',
-                category: 'مواد غذائية',
-                unit: 'كيلو',
-                purchasePriceSAR: 35.0,
-                profitMarginYER: 2000,
-                sellingPriceYER: (35.0 * this.currentExchangeRate) + 2000,
-                currentQuantity: 10,
-                minimumQuantity: 5,
-                shortcutNumber: 14,
-                description: 'عسل طبيعي جبلي أصلي',
-                expiryDate: '2025-12-31',
-                isLowStock: false,
-                isExpiringSoon: false
-            },
-            {
-                id: '7',
                 name: 'دقيق أبيض',
                 category: 'مواد غذائية',
                 unit: 'كيلو',
@@ -261,7 +214,23 @@ class ProductsManager {
                 isExpiringSoon: false
             },
             {
-                id: '8',
+                id: '5',
+                name: 'شاي أحمر',
+                category: 'مشروبات',
+                unit: 'علبة',
+                purchasePriceSAR: 18.0,
+                profitMarginYER: 1200,
+                sellingPriceYER: (18.0 * this.currentExchangeRate) + 1200,
+                currentQuantity: 5,
+                minimumQuantity: 10,
+                shortcutNumber: 5,
+                description: 'شاي أحمر سيلاني فاخر',
+                expiryDate: null,
+                isLowStock: true,
+                isExpiringSoon: false
+            },
+            {
+                id: '6',
                 name: 'قهوة عربية',
                 category: 'مشروبات',
                 unit: 'علبة',
@@ -275,6 +244,230 @@ class ProductsManager {
                 expiryDate: null,
                 isLowStock: false,
                 isExpiringSoon: false
+            },
+            {
+                id: '7',
+                name: 'حليب مجفف',
+                category: 'ألبان',
+                unit: 'علبة',
+                purchasePriceSAR: 22.0,
+                profitMarginYER: 1300,
+                sellingPriceYER: (22.0 * this.currentExchangeRate) + 1300,
+                currentQuantity: 20,
+                minimumQuantity: 12,
+                shortcutNumber: 7,
+                description: 'حليب مجفف كامل الدسم',
+                expiryDate: null,
+                isLowStock: false,
+                isExpiringSoon: false
+            },
+            {
+                id: '8',
+                name: 'معكرونة اسباجيتي',
+                category: 'مواد غذائية',
+                unit: 'علبة',
+                purchasePriceSAR: 4.5,
+                profitMarginYER: 300,
+                sellingPriceYER: (4.5 * this.currentExchangeRate) + 300,
+                currentQuantity: 60,
+                minimumQuantity: 25,
+                shortcutNumber: 8,
+                description: 'معكرونة اسباجيتي إيطالي',
+                expiryDate: null,
+                isLowStock: false,
+                isExpiringSoon: false
+            },
+            {
+                id: '9',
+                name: 'صلصة طماطم',
+                category: 'معلبات',
+                unit: 'علبة',
+                purchasePriceSAR: 3.0,
+                profitMarginYER: 200,
+                sellingPriceYER: (3.0 * this.currentExchangeRate) + 200,
+                currentQuantity: 35,
+                minimumQuantity: 15,
+                shortcutNumber: 9,
+                description: 'صلصة طماطم مركزة',
+                expiryDate: null,
+                isLowStock: false,
+                isExpiringSoon: false
+            },
+            {
+                id: '10',
+                name: 'تونة معلبة',
+                category: 'معلبات',
+                unit: 'علبة',
+                purchasePriceSAR: 8.0,
+                profitMarginYER: 600,
+                sellingPriceYER: (8.0 * this.currentExchangeRate) + 600,
+                currentQuantity: 8,
+                minimumQuantity: 20,
+                shortcutNumber: 10,
+                description: 'تونة في الزيت عالية الجودة',
+                expiryDate: '2024-08-15',
+                isLowStock: true,
+                isExpiringSoon: true
+            },
+            {
+                id: '11',
+                name: 'صابون غسيل',
+                category: 'منظفات',
+                unit: 'حبة',
+                purchasePriceSAR: 12.0,
+                profitMarginYER: 800,
+                sellingPriceYER: (12.0 * this.currentExchangeRate) + 800,
+                currentQuantity: 25,
+                minimumQuantity: 10,
+                shortcutNumber: 11,
+                description: 'صابون غسيل للملابس',
+                expiryDate: null,
+                isLowStock: false,
+                isExpiringSoon: false
+            },
+            {
+                id: '12',
+                name: 'شامبو للشعر',
+                category: 'عناية شخصية',
+                unit: 'حبة',
+                purchasePriceSAR: 18.5,
+                profitMarginYER: 1100,
+                sellingPriceYER: (18.5 * this.currentExchangeRate) + 1100,
+                currentQuantity: 12,
+                minimumQuantity: 8,
+                shortcutNumber: 12,
+                description: 'شامبو للشعر الجاف والدهني',
+                expiryDate: null,
+                isLowStock: false,
+                isExpiringSoon: false
+            },
+            {
+                id: '13',
+                name: 'فول مدمس',
+                category: 'معلبات',
+                unit: 'علبة',
+                purchasePriceSAR: 5.5,
+                profitMarginYER: 400,
+                sellingPriceYER: (5.5 * this.currentExchangeRate) + 400,
+                currentQuantity: 30,
+                minimumQuantity: 15,
+                shortcutNumber: 13,
+                description: 'فول مدمس جاهز للأكل',
+                expiryDate: null,
+                isLowStock: false,
+                isExpiringSoon: false
+            },
+            {
+                id: '14',
+                name: 'عسل طبيعي',
+                category: 'مواد غذائية',
+                unit: 'كيلو',
+                purchasePriceSAR: 35.0,
+                profitMarginYER: 2000,
+                sellingPriceYER: (35.0 * this.currentExchangeRate) + 2000,
+                currentQuantity: 10,
+                minimumQuantity: 5,
+                shortcutNumber: 14,
+                description: 'عسل طبيعي جبلي أصلي',
+                expiryDate: '2025-12-31',
+                isLowStock: false,
+                isExpiringSoon: false
+            },
+            {
+                id: '15',
+                name: 'بسكويت شاي',
+                category: 'حلويات',
+                unit: 'علبة',
+                purchasePriceSAR: 4.0,
+                profitMarginYER: 250,
+                sellingPriceYER: (4.0 * this.currentExchangeRate) + 250,
+                currentQuantity: 45,
+                minimumQuantity: 20,
+                shortcutNumber: 15,
+                description: 'بسكويت للشاي بالسمسم',
+                expiryDate: '2024-08-15',
+                isLowStock: false,
+                isExpiringSoon: true
+            },
+            {
+                id: '16',
+                name: 'ملح طعام',
+                category: 'مواد غذائية',
+                unit: 'كيلو',
+                purchasePriceSAR: 2.0,
+                profitMarginYER: 150,
+                sellingPriceYER: (2.0 * this.currentExchangeRate) + 150,
+                currentQuantity: 80,
+                minimumQuantity: 30,
+                shortcutNumber: 16,
+                description: 'ملح طعام مكرر ونقي',
+                expiryDate: null,
+                isLowStock: false,
+                isExpiringSoon: false
+            },
+            {
+                id: '17',
+                name: 'مناديل ورقية',
+                category: 'مناديل',
+                unit: 'علبة',
+                purchasePriceSAR: 8.0,
+                profitMarginYER: 500,
+                sellingPriceYER: (8.0 * this.currentExchangeRate) + 500,
+                currentQuantity: 3,
+                minimumQuantity: 12,
+                shortcutNumber: 17,
+                description: 'مناديل ورقية ناعمة',
+                expiryDate: null,
+                isLowStock: true,
+                isExpiringSoon: false
+            },
+            {
+                id: '18',
+                name: 'خل أبيض',
+                category: 'مواد غذائية',
+                unit: 'لتر',
+                purchasePriceSAR: 4.5,
+                profitMarginYER: 300,
+                sellingPriceYER: (4.5 * this.currentExchangeRate) + 300,
+                currentQuantity: 22,
+                minimumQuantity: 10,
+                shortcutNumber: 18,
+                description: 'خل أبيض للطبخ والسلطات',
+                expiryDate: null,
+                isLowStock: false,
+                isExpiringSoon: false
+            },
+            {
+                id: '19',
+                name: 'مسحوق غسيل',
+                category: 'منظفات',
+                unit: 'كيلو',
+                purchasePriceSAR: 16.0,
+                profitMarginYER: 1000,
+                sellingPriceYER: (16.0 * this.currentExchangeRate) + 1000,
+                currentQuantity: 18,
+                minimumQuantity: 12,
+                shortcutNumber: 19,
+                description: 'مسحوق غسيل للغسالات',
+                expiryDate: null,
+                isLowStock: false,
+                isExpiringSoon: false
+            },
+            {
+                id: '20',
+                name: 'جبن أبيض',
+                category: 'ألبان',
+                unit: 'كيلو',
+                purchasePriceSAR: 20.0,
+                profitMarginYER: 1200,
+                sellingPriceYER: (20.0 * this.currentExchangeRate) + 1200,
+                currentQuantity: 6,
+                minimumQuantity: 8,
+                shortcutNumber: 20,
+                description: 'جبن أبيض طازج للفطار',
+                expiryDate: '2024-07-30',
+                isLowStock: true,
+                isExpiringSoon: true
             }
         ];
 
@@ -318,11 +511,17 @@ class ProductsManager {
             return;
         }
 
+        // Support Arabic numerals conversion
+        const arabicToWestern = (s) => {
+            return s.replace(/[\u0660-\u0669]/g, d => String.fromCharCode(d.charCodeAt(0) - 1632));
+        };
+
         // Check if search term is a number (shortcut search)
-        const isNumber = /^\d+$/.test(this.searchTerm);
+        const isNumber = /^[\d\u0660-\u0669]+$/.test(this.searchTerm);
         
         if (isNumber) {
-            const shortcutNum = parseInt(this.searchTerm);
+            const westernSearchValue = arabicToWestern(this.searchTerm);
+            const shortcutNum = parseInt(westernSearchValue, 10);
             this.filteredProducts = this.products.filter(product => 
                 product.shortcutNumber === shortcutNum
             );

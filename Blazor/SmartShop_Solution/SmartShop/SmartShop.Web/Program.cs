@@ -1,4 +1,4 @@
-using SmartShop.Shared.Services;
+﻿using SmartShop.Shared.Services;
 using SmartShop.Web.Components;
 using SmartShop.Web.Services;
 
@@ -27,7 +27,7 @@ else
 }
 
 app.UseHttpsRedirection();
-
+app.MapStaticAssets();
 app.UseStaticFiles();
 app.UseAntiforgery();
 

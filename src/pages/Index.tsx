@@ -1,5 +1,5 @@
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { SidebarProvider, SidebarInset } from '@/components/ui/sidebar';
 import Header from '@/components/Header';
 import Dashboard from '@/components/Dashboard';
@@ -12,13 +12,24 @@ import PurchasePage from '@/components/PurchasePage';
 import ProductShortcuts from '@/components/ProductShortcuts';
 import AppSidebar from '@/components/AppSidebar';
 import BottomNavigation from '@/components/BottomNavigation';
-import { useIsMobile } from '@/hooks/use-mobile';
+
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Settings, User, FileText } from 'lucide-react';
 
 const Index = () => {
   const [activeSection, setActiveSection] = useState('dashboard');
-  const isMobile = useIsMobile();
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Simple mobile detection without hooks dependency issues
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   const renderContent = () => {
     switch (activeSection) {

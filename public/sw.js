@@ -3,9 +3,7 @@ const CACHE_NAME = 'smart-grocery-v1.4.0'; // Updated version for new icon
 const urlsToCache = [
   '/',
   '/index.html',
-  '/manifest.json',
-  '/lovable-uploads/a8f4606b-d4a6-4c3e-9193-312dd5a191c3.png',
-  '/src/index.css'
+  '/manifest.json'
 ];
 
 // تثبيت Service Worker
@@ -13,8 +11,11 @@ self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then((cache) => {
-        console.log('✅ Opened cache with new app icon');
-        return cache.addAll(urlsToCache);
+        console.log('✅ Opened cache');
+        return cache.addAll(urlsToCache).catch((error) => {
+          console.log('Cache addAll failed:', error);
+          return Promise.resolve();
+        });
       })
   );
 });
@@ -85,9 +86,7 @@ self.addEventListener('fetch', (event) => {
         })
         .catch(() => {
           // Fallback for offline scenarios
-          if (event.request.destination === 'image') {
-            return caches.match('/lovable-uploads/a8f4606b-d4a6-4c3e-9193-312dd5a191c3.png');
-          }
+          return caches.match('/');
         })
     );
   }

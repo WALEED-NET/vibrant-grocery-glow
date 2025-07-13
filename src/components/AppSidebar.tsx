@@ -101,6 +101,12 @@ const AppSidebar = ({ activeSection, onSectionChange }: AppSidebarProps) => {
 
   const settingsItems = [
     {
+      id: 'user-management',
+      title: 'إدارة المستخدمين',
+      icon: Shield,
+      permission: 'settings',
+    },
+    {
       id: 'settings',
       title: 'إعدادات التطبيق',
       icon: Settings,

@@ -3,6 +3,8 @@ import { useState, useEffect } from 'react';
 import { SidebarProvider, SidebarInset } from '@/components/ui/sidebar';
 import Header from '@/components/Header';
 import Dashboard from '@/components/Dashboard';
+import WorkerDashboard from '@/components/WorkerDashboard';
+import UserManagementPage from '@/components/UserManagementPage';
 import ProductsPage from '@/components/ProductsPage';
 import ShortageBasket from '@/components/ShortageBasket';
 import ExchangeRateManager from '@/components/ExchangeRateManager';
@@ -22,7 +24,7 @@ import { useAuthStore } from '@/stores/useAuthStore';
 const Index = () => {
   const [activeSection, setActiveSection] = useState('dashboard');
   const [isMobile, setIsMobile] = useState(false);
-  const { user } = useAuthStore();
+  const { user, hasPermission } = useAuthStore();
 
   // Simple mobile detection without hooks dependency issues
   useEffect(() => {
@@ -38,7 +40,9 @@ const Index = () => {
   const renderContent = () => {
     switch (activeSection) {
       case 'dashboard':
-        return <Dashboard onSectionChange={setActiveSection} />;
+        return user?.role === 'Worker' && !hasPermission('dashboard') ? 
+          <WorkerDashboard onSectionChange={setActiveSection} /> : 
+          <Dashboard onSectionChange={setActiveSection} />;
       case 'products':
         return (
           <RoleGuard permission="products.view">
@@ -99,6 +103,12 @@ const Index = () => {
                 </div>
               </CardContent>
             </Card>
+          </RoleGuard>
+        );
+      case 'user-management':
+        return (
+          <RoleGuard permission="settings">
+            <UserManagementPage />
           </RoleGuard>
         );
       case 'settings':

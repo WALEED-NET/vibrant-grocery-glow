@@ -61,7 +61,7 @@ export const DEFAULT_PERMISSIONS: Record<UserRole, Permission> = {
     units: true,
   },
   Worker: {
-    dashboard: true,
+    dashboard: false, // Workers get their own dashboard
     products: {
       view: true,
       add: false,

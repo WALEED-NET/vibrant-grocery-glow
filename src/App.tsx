@@ -12,7 +12,15 @@ import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import { useState } from "react";
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: 2,
+      staleTime: 5 * 60 * 1000, // 5 minutes
+      gcTime: 10 * 60 * 1000, // 10 minutes
+    },
+  },
+});
 
 const App = () => {
   const { showSplash, isAppReady, handleSplashComplete: originalHandleSplashComplete } = useSplashScreen();
@@ -33,25 +41,33 @@ const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
-        <Toaster />
-        <Sonner />
-        
-        {showSplash && (
-          <SplashScreen onComplete={handleSplashComplete} />
-        )}
-        
-        {showLogin && (
-          <LoginPage onLoginSuccess={handleLoginSuccess} />
-        )}
-        
-        {isAppReady && isAuthenticated && !showLogin && (
-          <BrowserRouter>
-            <Routes>
-              <Route path="/" element={<Index />} />
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </BrowserRouter>
-        )}
+        <div className="min-h-screen bg-gradient-to-br from-background to-muted/30">
+          <Toaster />
+          <Sonner 
+            position="top-center" 
+            toastOptions={{
+              className: "text-right",
+              style: { direction: 'rtl' }
+            }}
+          />
+          
+          {showSplash && (
+            <SplashScreen onComplete={handleSplashComplete} />
+          )}
+          
+          {showLogin && (
+            <LoginPage onLoginSuccess={handleLoginSuccess} />
+          )}
+          
+          {isAppReady && isAuthenticated && !showLogin && (
+            <BrowserRouter>
+              <Routes>
+                <Route path="/" element={<Index />} />
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </BrowserRouter>
+          )}
+        </div>
       </TooltipProvider>
     </QueryClientProvider>
   );

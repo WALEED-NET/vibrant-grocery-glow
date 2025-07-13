@@ -101,7 +101,7 @@ const UserManagementPage = () => {
               إضافة مستخدم جديد
             </Button>
           </DialogTrigger>
-          <DialogContent className="sm:max-w-md bg-background border z-50">
+          <DialogContent className="sm:max-w-md bg-background border shadow-xl">
             <DialogHeader>
               <DialogTitle>إضافة مستخدم جديد</DialogTitle>
             </DialogHeader>
@@ -140,7 +140,7 @@ const UserManagementPage = () => {
                   <SelectTrigger className="bg-background border-input">
                     <SelectValue placeholder="اختر الدور" />
                   </SelectTrigger>
-                  <SelectContent className="bg-background border z-50">
+                  <SelectContent className="bg-background border shadow-lg z-[9999]">
                     <SelectItem value="ShopOwner">مالك المتجر</SelectItem>
                     <SelectItem value="Worker">موظف</SelectItem>
                   </SelectContent>
@@ -204,7 +204,7 @@ const UserManagementPage = () => {
                   <SelectTrigger className="bg-background border-input">
                     <SelectValue placeholder="اختر الدور" />
                   </SelectTrigger>
-                  <SelectContent className="bg-background border z-50">
+                  <SelectContent className="bg-background border shadow-lg z-[9999]">
                     <SelectItem value="ShopOwner">مالك المتجر</SelectItem>
                     <SelectItem value="Worker">موظف</SelectItem>
                   </SelectContent>
@@ -281,7 +281,7 @@ const UserManagementPage = () => {
 
       {/* Edit User Dialog */}
       <Dialog open={editUserDialog} onOpenChange={setEditUserDialog}>
-        <DialogContent className="sm:max-w-lg bg-background border z-50">
+        <DialogContent className="sm:max-w-lg bg-background border shadow-xl">
           <DialogHeader>
             <DialogTitle>تعديل المستخدم</DialogTitle>
           </DialogHeader>

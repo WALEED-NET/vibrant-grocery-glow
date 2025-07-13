@@ -4,7 +4,7 @@ import App from './App.tsx'
 import './index.css'
 import { toast } from "sonner";
 
-// تسجيل Service Worker
+// Service Worker registration for PWA functionality
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
     navigator.serviceWorker.register('/sw.js', { scope: '/' })
@@ -17,11 +17,10 @@ if ('serviceWorker' in navigator) {
             installingWorker.onstatechange = () => {
               if (installingWorker.state === 'installed') {
                 if (navigator.serviceWorker.controller) {
-                  // يتوفر محتوى جديد ؛ اطلب من المستخدم التحديث.
                   console.log('New content is available. Please refresh.');
                   toast.info("تحديث جديد متوفر للتطبيق", {
                     description: "اضغط على زر التحديث لتطبيق التغييرات.",
-                    duration: Infinity, // لن يتم إغلاق الرسالة تلقائيًا
+                    duration: Infinity,
                     closeButton: true,
                     action: {
                       label: "تحديث الآن",
@@ -31,15 +30,15 @@ if ('serviceWorker' in navigator) {
                     },
                   });
                 } else {
-                  // تم تخزين المحتوى مؤقتًا لأول مرة.
                   console.log('Content is cached for offline use.');
+                  toast.success("التطبيق جاهز للاستخدام بدون إنترنت!");
                 }
               }
             };
           }
         };
 
-        // يتم إطلاق هذا الحدث عند تغيير Service Worker الذي يتحكم في هذه الصفحة.
+        // Handle controller change (new SW takes control)
         let refreshing;
         navigator.serviceWorker.addEventListener('controllerchange', () => {
           if (refreshing) return;
@@ -55,5 +54,20 @@ if ('serviceWorker' in navigator) {
     console.log('Service Worker is not supported by this browser.');
 }
 
-createRoot(document.getElementById("root")!).render(<App />);
+// Enhanced error handling for the app
+window.addEventListener('error', (event) => {
+  console.error('Global error caught:', event.error);
+});
 
+window.addEventListener('unhandledrejection', (event) => {
+  console.error('Unhandled promise rejection:', event.reason);
+});
+
+// Initialize the React app
+const root = createRoot(document.getElementById("root")!);
+root.render(<App />);
+
+// Add some helpful console messages
+console.log('🚀 البقالة الذكية - Smart Grocery Management System');
+console.log('📱 التطبيق يدعم التشغيل كتطبيق ويب تقدمي (PWA)');
+console.log('🌐 يمكن استخدام التطبيق بدون إنترنت بعد التحميل الأول');

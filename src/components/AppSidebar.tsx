@@ -243,15 +243,15 @@ const AppSidebar = ({ activeSection, onSectionChange }: AppSidebarProps) => {
         </SidebarGroup>
       </SidebarContent>
 
-      <SidebarFooter className="p-3 border-t bg-muted/30">
+      <SidebarFooter className="p-3 border-t bg-muted/30 mt-auto flex-shrink-0">
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton 
               onClick={handleLogout}
-              className="w-full justify-start text-muted-foreground hover:text-destructive hover:bg-destructive/10 h-9 text-sm"
+              className="w-full justify-start text-muted-foreground hover:text-destructive hover:bg-destructive/10 h-10 text-sm transition-colors duration-200"
             >
               <LogOut className="h-4 w-4 flex-shrink-0" />
-              <span className="truncate">تسجيل الخروج</span>
+              <span className="truncate font-medium">تسجيل الخروج</span>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>

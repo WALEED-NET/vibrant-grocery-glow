@@ -11,6 +11,17 @@ const SplashScreen: React.FC<SplashScreenProps> = ({ onComplete }) => {
   const [animationStage, setAnimationStage] = useState(0);
 
   useEffect(() => {
+    // Remove lovable badge during splash screen
+    const removeLovableBadge = () => {
+      const badge = document.getElementById('lovable-badge');
+      if (badge) {
+        badge.remove();
+      }
+    };
+    
+    // Remove badge immediately when splash screen starts
+    removeLovableBadge();
+    
     const timer1 = setTimeout(() => setAnimationStage(1), 300);
     const timer2 = setTimeout(() => setAnimationStage(2), 800);
     const timer3 = setTimeout(() => setAnimationStage(3), 1200);

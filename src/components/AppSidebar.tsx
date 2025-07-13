@@ -1,4 +1,4 @@
-import { BarChart3, Package, ShoppingCart, DollarSign, Settings, User, FileText, Ruler, LogOut, TrendingUp, ShoppingBag } from 'lucide-react';
+import { BarChart3, Package, ShoppingCart, DollarSign, Settings, User, FileText, Ruler, LogOut, TrendingUp, ShoppingBag, Shield } from 'lucide-react';
 import {
   Sidebar,
   SidebarContent,
@@ -13,6 +13,10 @@ import {
   SidebarSeparator,
 } from '@/components/ui/sidebar';
 import { useSidebar } from '@/components/ui/sidebar';
+import { useAuthStore } from '@/stores/useAuthStore';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { Badge } from '@/components/ui/badge';
+import RoleGuard from '@/components/RoleGuard';
 
 interface AppSidebarProps {
   activeSection: string;
@@ -21,6 +25,7 @@ interface AppSidebarProps {
 
 const AppSidebar = ({ activeSection, onSectionChange }: AppSidebarProps) => {
   const { setOpenMobile } = useSidebar();
+  const { user, logout } = useAuthStore();
 
   const handleItemClick = (sectionId: string) => {
     onSectionChange(sectionId);
@@ -28,36 +33,54 @@ const AppSidebar = ({ activeSection, onSectionChange }: AppSidebarProps) => {
     setOpenMobile(false);
   };
 
+  const getRoleDisplayName = (role: string) => {
+    return role === 'ShopOwner' ? 'صاحب المتجر' : 'عامل';
+  };
+
+  const getRoleBadgeVariant = (role: string) => {
+    return role === 'ShopOwner' ? 'default' : 'secondary';
+  };
+
+  const handleLogout = () => {
+    logout();
+  };
+
   const mainMenuItems = [
     {
       id: 'dashboard',
       title: 'لوحة التحكم',
       icon: BarChart3,
+      permission: 'dashboard',
     },
     {
       id: 'products',
       title: 'إدارة المنتجات',
       icon: Package,
+      permission: 'products.view',
     },
     {
       id: 'sales',
       title: 'عمليات البيع',
       icon: TrendingUp,
+      permission: 'sales.view',
     },
     {
       id: 'purchase',
       title: 'عمليات الشراء',
       icon: ShoppingBag,
+      permission: 'purchases.view',
     },
     {
       id: 'shortage',
       title: 'سلة النواقص',
       icon: ShoppingCart,
+      permission: 'inventory.view',
     },
     {
       id: 'exchange-rate',
       title: 'سعر الصرف',
       icon: DollarSign,
+      permission: 'exchangeRates',
     },
   ];
 
@@ -66,11 +89,13 @@ const AppSidebar = ({ activeSection, onSectionChange }: AppSidebarProps) => {
       id: 'units',
       title: 'إدارة الوحدات',
       icon: Ruler,
+      permission: 'units',
     },
     {
       id: 'reports',
       title: 'التقارير',
       icon: FileText,
+      permission: 'reports',
     },
   ];
 
@@ -79,6 +104,7 @@ const AppSidebar = ({ activeSection, onSectionChange }: AppSidebarProps) => {
       id: 'settings',
       title: 'إعدادات التطبيق',
       icon: Settings,
+      permission: 'settings',
     },
     {
       id: 'profile',
@@ -91,16 +117,21 @@ const AppSidebar = ({ activeSection, onSectionChange }: AppSidebarProps) => {
     <Sidebar className="w-64 border-l bg-gradient-to-b from-background to-muted/30" side="right">
       <SidebarHeader className="p-4 bg-gradient-to-r from-[#388E3C] to-[#2E7D32] h-16">
         <div className="flex items-center space-x-3">
-          <div className="bg-white/20 p-2 rounded-lg flex-shrink-0">
-            <ShoppingCart className="h-5 w-5 text-white" />
-          </div>
+          <Avatar className="w-8 h-8">
+            <AvatarFallback className="bg-white text-[#388E3C] text-xs font-semibold">
+              {user?.name?.split(' ').map(n => n[0]).join('').toUpperCase() || 'U'}
+            </AvatarFallback>
+          </Avatar>
           <div className="min-w-0 flex-1">
-            <h1 className="text-sm font-bold text-white truncate">
-              نظام إدارة البقالة الذكية
+            <h1 className="text-sm font-medium text-white truncate">
+              {user?.name}
             </h1>
-            <p className="text-xs text-white/80 truncate">
-              إدارة شاملة للمخزون والمبيعات
-            </p>
+            <div className="flex items-center gap-1">
+              <Badge variant={getRoleBadgeVariant(user?.role || '')} className="text-xs bg-white/20 text-white border-white/30">
+                <Shield className="w-3 h-3 mr-1" />
+                {getRoleDisplayName(user?.role || '')}
+              </Badge>
+            </div>
           </div>
         </div>
       </SidebarHeader>
@@ -111,20 +142,22 @@ const AppSidebar = ({ activeSection, onSectionChange }: AppSidebarProps) => {
           <SidebarGroupContent>
             <SidebarMenu>
               {mainMenuItems.map((item) => (
-                <SidebarMenuItem key={item.id}>
-                  <SidebarMenuButton
-                    isActive={activeSection === item.id}
-                    onClick={() => handleItemClick(item.id)}
-                    className={`w-full justify-start h-10 rounded-lg transition-all duration-200 text-sm ${
-                      activeSection === item.id 
-                        ? 'bg-[#388E3C] text-white shadow-md hover:bg-[#2E7D32]' 
-                        : 'hover:bg-[#388E3C]/10 hover:text-[#388E3C]'
-                    }`}
-                  >
-                    <item.icon className="h-4 w-4 flex-shrink-0" />
-                    <span className="font-medium truncate">{item.title}</span>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
+                <RoleGuard key={item.id} permission={item.permission}>
+                  <SidebarMenuItem>
+                    <SidebarMenuButton
+                      isActive={activeSection === item.id}
+                      onClick={() => handleItemClick(item.id)}
+                      className={`w-full justify-start h-10 rounded-lg transition-all duration-200 text-sm ${
+                        activeSection === item.id 
+                          ? 'bg-[#388E3C] text-white shadow-md hover:bg-[#2E7D32]' 
+                          : 'hover:bg-[#388E3C]/10 hover:text-[#388E3C]'
+                      }`}
+                    >
+                      <item.icon className="h-4 w-4 flex-shrink-0" />
+                      <span className="font-medium truncate">{item.title}</span>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                </RoleGuard>
               ))}
             </SidebarMenu>
           </SidebarGroupContent>
@@ -137,20 +170,22 @@ const AppSidebar = ({ activeSection, onSectionChange }: AppSidebarProps) => {
           <SidebarGroupContent>
             <SidebarMenu>
               {managementItems.map((item) => (
-                <SidebarMenuItem key={item.id}>
-                  <SidebarMenuButton
-                    isActive={activeSection === item.id}
-                    onClick={() => handleItemClick(item.id)}
-                    className={`w-full justify-start h-10 rounded-lg transition-all duration-200 text-sm ${
-                      activeSection === item.id 
-                        ? 'bg-[#388E3C] text-white shadow-md hover:bg-[#2E7D32]' 
-                        : 'hover:bg-[#388E3C]/10 hover:text-[#388E3C]'
-                    }`}
-                  >
-                    <item.icon className="h-4 w-4 flex-shrink-0" />
-                    <span className="font-medium truncate">{item.title}</span>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
+                <RoleGuard key={item.id} permission={item.permission}>
+                  <SidebarMenuItem>
+                    <SidebarMenuButton
+                      isActive={activeSection === item.id}
+                      onClick={() => handleItemClick(item.id)}
+                      className={`w-full justify-start h-10 rounded-lg transition-all duration-200 text-sm ${
+                        activeSection === item.id 
+                          ? 'bg-[#388E3C] text-white shadow-md hover:bg-[#2E7D32]' 
+                          : 'hover:bg-[#388E3C]/10 hover:text-[#388E3C]'
+                      }`}
+                    >
+                      <item.icon className="h-4 w-4 flex-shrink-0" />
+                      <span className="font-medium truncate">{item.title}</span>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                </RoleGuard>
               ))}
             </SidebarMenu>
           </SidebarGroupContent>
@@ -163,20 +198,39 @@ const AppSidebar = ({ activeSection, onSectionChange }: AppSidebarProps) => {
           <SidebarGroupContent>
             <SidebarMenu>
               {settingsItems.map((item) => (
-                <SidebarMenuItem key={item.id}>
-                  <SidebarMenuButton
-                    isActive={activeSection === item.id}
-                    onClick={() => handleItemClick(item.id)}
-                    className={`w-full justify-start h-10 rounded-lg transition-all duration-200 text-sm ${
-                      activeSection === item.id 
-                        ? 'bg-[#388E3C] text-white shadow-md hover:bg-[#2E7D32]' 
-                        : 'hover:bg-[#388E3C]/10 hover:text-[#388E3C]'
-                    }`}
-                  >
-                    <item.icon className="h-4 w-4 flex-shrink-0" />
-                    <span className="font-medium truncate">{item.title}</span>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
+                item.permission ? (
+                  <RoleGuard key={item.id} permission={item.permission}>
+                    <SidebarMenuItem>
+                      <SidebarMenuButton
+                        isActive={activeSection === item.id}
+                        onClick={() => handleItemClick(item.id)}
+                        className={`w-full justify-start h-10 rounded-lg transition-all duration-200 text-sm ${
+                          activeSection === item.id 
+                            ? 'bg-[#388E3C] text-white shadow-md hover:bg-[#2E7D32]' 
+                            : 'hover:bg-[#388E3C]/10 hover:text-[#388E3C]'
+                        }`}
+                      >
+                        <item.icon className="h-4 w-4 flex-shrink-0" />
+                        <span className="font-medium truncate">{item.title}</span>
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>
+                  </RoleGuard>
+                ) : (
+                  <SidebarMenuItem key={item.id}>
+                    <SidebarMenuButton
+                      isActive={activeSection === item.id}
+                      onClick={() => handleItemClick(item.id)}
+                      className={`w-full justify-start h-10 rounded-lg transition-all duration-200 text-sm ${
+                        activeSection === item.id 
+                          ? 'bg-[#388E3C] text-white shadow-md hover:bg-[#2E7D32]' 
+                          : 'hover:bg-[#388E3C]/10 hover:text-[#388E3C]'
+                      }`}
+                    >
+                      <item.icon className="h-4 w-4 flex-shrink-0" />
+                      <span className="font-medium truncate">{item.title}</span>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                )
               ))}
             </SidebarMenu>
           </SidebarGroupContent>
@@ -186,7 +240,10 @@ const AppSidebar = ({ activeSection, onSectionChange }: AppSidebarProps) => {
       <SidebarFooter className="p-3 border-t bg-muted/30">
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton className="w-full justify-start text-muted-foreground hover:text-destructive hover:bg-destructive/10 h-9 text-sm">
+            <SidebarMenuButton 
+              onClick={handleLogout}
+              className="w-full justify-start text-muted-foreground hover:text-destructive hover:bg-destructive/10 h-9 text-sm"
+            >
               <LogOut className="h-4 w-4 flex-shrink-0" />
               <span className="truncate">تسجيل الخروج</span>
             </SidebarMenuButton>
